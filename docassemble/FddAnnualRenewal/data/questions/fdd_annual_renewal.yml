@@ -69,16 +69,18 @@ code: |
   nav.set_section('review_fdd_annual_renewal')
   user_role = 'na'
   
-  preferred_issuance_date
+  users.gather()
+  
+  preferred
   
   if not upload:
-    current_franchisee.gather()
-    former_franchisees.gather(complete_attribute = "former_franchisees_gather_complete")
-    signed_franchisee.gather()
+    current_franchisee.gather(complete_attribute = "gather_complete")
+    signed_franchisee.gather(complete_attribute = "gather_complete")
+    former_franchisee.gather(complete_attribute = "gather_complete_1")
     
   set_progress(11)
   
-  franchise_sellers.gather(complete_attribute = "franchise_sellers_gather_complete")
+  franchise_seller.gather(complete_attribute = "gather_complete_2")
   
   has_item_1_changes
   
@@ -129,7 +131,7 @@ code: |
   
   has_financials
 
-  changes
+  has_other_changes
   
   set_progress(99)
 
@@ -141,7 +143,6 @@ comment: |
   Delete mandatory: True to include in another interview
 mandatory: True
 code: |
-  al_intro_screen
   fdd_annual_renewal_intro
   interview_order_fdd_annual_renewal
   signature_date
@@ -164,19 +165,67 @@ question: |
 subquestion: |
   TODO
 ---
-generic object: ALIndividual
-code: |
-  x.name.first
-  x.address.address
-  x.additional_reqs
-  x.franchise_sellers_gather_complete = True
+id: who will be on this form
+generic object: ALPeopleList
+question: |
+  Do you have any ${noun_plural(x.object_name())} to add?
+fields:
+  - no label: x.there_are_any
+    datatype: yesnoradio
 ---
 generic object: ALIndividual
 code: |
-  x.name.first
-  x.address.address
+  x.phone_number
+  x.gather_complete = True
+---
+generic object: ALIndividual
+code: |
+  x.phone_number
+  x.additional_reqs
+  x.gather_complete_2 = True
+---
+generic object: ALIndividual
+code: |
+  x.phone_number
   x.category
-  x.former_franchisees_gather_complete = True
+  x.gather_complete_1 = True
+---
+generic object: ALPeopleList
+id: any other people
+question: |
+  Are there any other ${ noun_plural(x.object_name()) }?
+fields:
+  - no label: x.there_is_another
+    datatype: yesnoradio
+---
+generic object: ALIndividual
+template: x.person_type_label
+content: |
+  Are you a person or an organization?
+---
+generic object: ALIndividual
+template: x.business_name_label
+content: |
+  Name of organization
+---
+generic object: ALIndividual
+template: x.business_choice_label
+content: |
+  Organization
+---
+id: basic info
+generic object: ALIndividual
+sets:
+  - x.name.first
+  - x.name.last
+question:  |
+  ${ noun_plural(x.object_name()) } Basic Information
+fields:
+  - code: |
+      x.name_fields(person_or_business='unsure')
+  - code: |
+      x.address_fields(show_country=True)
+  - Phone number: x.phone_number
 ---
 id: other changes
 question: |
@@ -235,15 +284,16 @@ fields:
     show if: required_fee_changes
 ---
 id: former franchisee category
+generic object: ALIndividual
 question: |
-  What is the appropriate category for ${x.name}?
+  What is the appropriate category for ${x}?
 field: x.category
 choices:
-  - Transferred
-  - Terminated
-  - Not renewed
-  - Reacquired by franchisor
-  - Otherwise left system.
+  - Transferred: transferred
+  - Terminated: terminated
+  - Not renewed: not_renewed
+  - Reacquired by franchisor: reacquired_by_franchisor
+  - Otherwise left system: otherwise_left_system
 ---
 id: item 6
 question: |
@@ -255,98 +305,150 @@ fields:
     show if: intended_fee_changes
 ---
 id: additional questions 
+generic object: ALIndividual
 question: |
-  List any additional questions for ${ x.name } required by certain states.
+  List any additional questions for ${ x } required by certain states.
 fields:
   - no label: x.additional_reqs
     input type: area
 ---
-id: Screen 13
+id: Upload documents
 question: |
-  Screen 13
+  Upload documents
+subquestion: |
+  Do you have documents to upload listing the names, addresses, and phone numbers for your current franchisees, any that signed a franchise agreement but have not yet opened up for business, and any former franchises? 
+  
+  If you do not have these documents, you will be able to enter this information on the following screens.
 fields:
-  - "Upload": upload
+  - "no label": upload
+    datatype: yesnoradio
+  - Upload it now: franchisee_lists_attachment.file
+    datatype: file
+    accept: |
+      "image/*"
+    show if: upload
 ---
-id: Screen 14
+id: states
 question: |
-  Screen 14
+  Which state will want to register in or renew this year? 
 fields:
-  - "States": states
+  - State: states
+    code: states_list()
 ---
-id: Screen 15
+id: advertising
 question: |
-  Screen 15
+  Do you have an active advertising fund?
 fields:
-  - "Active advertising fund": active_advertising_fund
-  - "Expense type": expense_type
-  - "Expense type.percentage": expense_type.percentage
+  - "no label": active_advertising_fund
+    datatype: yesnoradio
   - "Expense total amount": expense_total_amount
     datatype: currency
     min: 0
-  - "Expense types": expense_types
+    show if: active_advertising_fund
+  - "% spent on Production": production
+    datatype: number
+    min: 0
+    max: 100
+    show if: active_advertising_fund
+  - "% spent on Media Placement": media_placement
+    datatype: number
+    min: 0
+    max: 100
+    show if: active_advertising_fund
+  - "% spent on Administrative": administrative
+    datatype: number
+    min: 0
+    max: 100
+    show if: active_advertising_fund
+  - "% spent on Other": other
+    datatype: number
+    min: 0
+    max: 100
+    show if: active_advertising_fund
+  - "Describe Other": other_description
+    show if: active_advertising_fund
 ---
-id: Screen 16
+id: Wants new trademarks
 question: |
-  Screen 16
+  Would you like to register additional trademarks for the system?
 fields:
-  - "Wants new trademarks details": wants_new_trademarks_details
-  - "Wants new trademarks": wants_new_trademarks
+  - "no label": wants_new_trademarks
+    datatype: yesnoradio
+  - "Add details": wants_new_trademarks_details
+    show if: wants_new_trademarks
 ---
-id: Screen 17
+id: How territory determined changes
 question: |
-  Screen 17
+  Has there been any revisions or changes in how your territory is determined?
 fields:
-  - "Territory determined changes details": territory_determined_changes_details
-  - "Territory determined changes": territory_determined_changes
+  - "no label": territory_determined_changes
+    datatype: yesnoradio
+  - "Add details": territory_determined_changes_details
+    show if: territory_determined_changes
 ---
-id: Screen 18
+id: Public agency injunctions
 question: |
-  Screen 18
+  Have there been any public agency injunctions or restrictive orders or decrees against an affiliate, predecessor, or parent in any line of business (without regard to what trademarks were used)?
 fields:
-  - "Public agency injunctions": public_agency_injunctions
-  - "Public agency injunctions details": public_agency_injunctions_details
+  - "no label": public_agency_injunctions
+    datatype: yesnoradio
+  - "Add details": public_agency_injunctions_details
+    show if: public_agency_injunctions
 ---
-id: Screen 19
+id: item 1
 question: |
-  Screen 19
+  Are there any required changes in Item 1? 
+subquestion: | 
+  Some common revisions include: any new affiliates? Changes in leadership? Addresses, etc?
 fields:
-  - "Has item 1 changes": has_item_1_changes
-  - "Item 1 changes details": item_1_changes_details
+  - "no label": has_item_1_changes
+    datatype: yesnoradio
+  - "Add details": item_1_changes_details
+    show if: has_item_1_changes
 ---
-id: Screen 20
+id: initial fee
 question: |
-  Screen 20
+  Did you charge the same initial fee to all franchisees?
+subquestion: |
+  If you do not charge the same initial fee to all franchisees, then you will need to disclose “the range of formula used to calculate the initial fees paid in the fiscal year before the issance date and the factors that deternined the amount.”
 fields:
-  - "Fee and range": fee_and_range
-  - "Not uniform": not_uniform
+  - "no label": not_uniform
+    datatype: yesnoradio
+  - "Add details": fee_and_range
+    show if: not_uniform
 ---
-id: Screen 21
+id: financials upload
 question: |
-  Screen 21
+  Do you have your company financials and your auditor’s consent letter?
+subquestion: |
+  If you have your company financials and your auditor’s consent letter, please upload them here now; otherwise send it to us when you receive it, or come back here to upload at your convenience.
 fields:
-  - "Has financials": has_financials
+  - "no label": has_financials
+    datatype: yesnoradio
+  - Upload it now: financials_attachment.file
+    datatype: file
+    accept: |
+      "image/*"
+    show if: has_financials
 ---
-id: Screen 22
+id: preferred issuance date
 question: |
-  Screen 22
+  Do you have a preferred issuance date?
 fields:
-  - "Date of Preferred issuance": preferred_issuance_date
+  - "no label": preferred
+    datatype: yesnoradio
+  - "Date Preferred": preferred_issuance_date
     datatype: date
-  - "Preferred": preferred
+    show if: preferred
 ---
-id: Screen 23
+id: Protected territory
 question: |
-  Screen 23
+  Have you changed any aspect of your protected (or exclusive) territory?
 fields:
-  - "Protected territory changes details": protected_territory_changes_details
-  - "Protected territory changes": protected_territory_changes
----
-id: Screen 24
-question: |
-  Screen 24
-fields:
-  - "Franchise seller.address.address": franchise_seller.address.address
-  - "Franchise seller.name.first": franchise_seller.name.first
+  - "no label": protected_territory_changes
+    datatype: yesnoradio
+  - "Add details": protected_territory_changes_details
+    show if: protected_territory_changes
 ---
 id: item 7
 question: |
@@ -354,42 +456,55 @@ question: |
 subquestion: |
   Review your total initial investment (Item 7) based on your experiences in opening any new corporate or franchised locations last year and upon any current market conditions to ensure that this initial investment is still accurate.
 fields:
-  - "Item 7 changes details": item_7_changes_details
-  - "Has item 7 changes": has_item_7_changes
+  - "no label": has_item_7_changes
+    datatype: yesnoradio
+  - "Add details": item_7_changes_details
+    show if: has_item_7_changes
 ---
-id: Screen 26
+id: Rights reserved
 question: |
-  Screen 26
+  Are there any modifications to the rights reserved by the franchisor?
 fields:
-  - "Rights reserved changes details": rights_reserved_changes_details
-  - "Rights reserved changes": rights_reserved_changes
+  - "no label": rights_reserved_changes
+    datatype: yesnoradio
+  - "Add details": rights_reserved_changes_details
+    show if: rights_reserved_changes
 ---
-id: Screen 27
+id: material civil actions
 question: |
-  Screen 27
+  Have there been any material civil actions during your last fiscal year between you and any franchisee that relates to the operation of the franchised business?
 fields:
-  - "Material civil actions": material_civil_actions
-  - "Material civil actions details": material_civil_actions_details
+  - "no label": material_civil_actions
+    datatype: yesnoradio
+  - "Add details": material_civil_actions_details
+    show if: material_civil_actions
 ---
-id: Screen 28
+id: unit or system changes
 question: |
-  Screen 28
+  Are there any changes to your unit or system operations?
 fields:
-  - "Unit system changes": unit_system_changes
-  - "Unit system changes details": unit_system_changes_details
+  - "no label": unit_system_changes
+    datatype: yesnoradio
+  - "Add details": unit_system_changes_details
+    show if: unit_system_changes
 ---
-id: Screen 29
+id: item 14
 question: |
-  Screen 29
+  Have you added any patents, copyrights, or additional proprietary information to the system?
 fields:
-  - "Added patents copyrights details": added_patents_copyrights_details
-  - "Added patents copyrights": added_patents_copyrights
+  - "no label": added_patents_copyrights
+    datatype: yesnoradio
+  - "Add details": added_patents_copyrights_details
+    show if: added_patents_copyrights
 ---
-id: Screen 30
+id: item 4
 question: |
-  Screen 30
+  Has there been any bankruptcy filing by any parent companies, affiliates, or any persons listed in Item 2 of the FDD?
 fields:
-  - "Bankruptcy filing": bankruptcy_filing
+  - "no label": bankruptcy_filing
+    datatype: yesnoradio
+  - "Add details": bankruptcy_filing_details
+    show if: bankruptcy_filing
 ---
 id: preview fdd_annual_renewal
 question: |
@@ -423,10 +538,6 @@ review:
     button: |
       **Registered new trademarks**:
       ${ registered_new_trademarks }
-  - Edit: franchise_sellers
-    button: |
-      **Franchise sellers**:
-      ${ franchise_sellers }
   - Edit: goods_services_sold_details
     button: |
       **Goods services sold details**:
@@ -519,10 +630,6 @@ review:
     button: |
       **Fee and range**:
       ${ fee_and_range }
-  - Edit: expense_type
-    button: |
-      **Expense type**:
-      ${ expense_type }
   - Edit: has_item_1_changes
     button: |
       **Has item 1 changes**:
@@ -547,10 +654,6 @@ review:
     button: |
       **Item 7 changes details**:
       ${ item_7_changes_details }
-  - Edit: expense_type.percentage
-    button: |
-      **Expense type.percentage**:
-      ${ expense_type.percentage }
   - Edit: signed_franchisees
     button: |
       **Signed franchisees**:
@@ -635,10 +738,6 @@ review:
     button: |
       **Unit system changes details**:
       ${ unit_system_changes_details }
-  - Edit: expense_types
-    button: |
-      **Expense types**:
-      ${ expense_types }
   - Edit: territory_determined_changes_details
     button: |
       **Territory determined changes details**:
@@ -767,23 +866,36 @@ subquestion: |
 progress: 100
 ---
 objects:
-  - fdd_annual_renewal_post_interview_instructions: ALDocument.using(title="Instructions", filename="fdd_annual_renewal_next_steps.docx", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   - fdd_annual_renewal_attachment: ALDocument.using(title="Fdd annual renewal", filename="fdd_annual_renewal.docx", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[fdd_annual_renewal_post_interview_instructions,fdd_annual_renewal_attachment], filename="fdd_annual_renewal.docx_package.pdf", title="All forms to download for your records", enabled=True)
-  - al_recipient_bundle: ALDocumentBundle.using(elements=[fdd_annual_renewal_attachment], filename="fdd_annual_renewal.docx_package.pdf", title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[fdd_annual_renewal_attachment, franchisee_lists_attachment, financials_attachment], filename="fdd_annual_renewal.docx_package.pdf", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[fdd_annual_renewal_attachment, franchisee_lists_attachment, financials_attachment], filename="fdd_annual_renewal.docx_package.pdf", title="All forms to download for your records", enabled=True)
 ---
 attachments:
-  - name: fdd annual renewal post interview instructions
-    filename: Post-interview-instructions     
-    variable name: fdd_annual_renewal_post_interview_instructions[i]        
-    skip undefined: True
-    docx template file: fdd_annual_renewal_next_steps.docx
   - name: fdd annual renewal attachment
     filename: fdd_annual_renewal.docx     
     variable name: fdd_annual_renewal_attachment[i]        
     skip undefined: True
     docx template file: fdd_annual_renewal.docx
-
-
+---
+objects:
+  - franchisee_lists_attachment: ALDocumentUpload.using(
+          title="Franchisee lists",
+          filename="franchisee_lists",
+        )
+  - financials_attachment: ALDocumentUpload.using(
+          title="Financials",
+          filename="financials",
+        )
+---
+depends on:
+  - upload
+code: |
+  franchisee_lists_attachment.enabled=upload
+---
+depends on:
+  - has_financials
+code: |
+  financials_attachment.enabled=upload
+---
