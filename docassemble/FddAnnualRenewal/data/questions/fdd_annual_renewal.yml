@@ -1,0 +1,750 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+---
+metadata:
+  title: |
+    Fdd annual renewal
+  short title: |
+    Fdd annual renewal
+  authors:
+---
+mandatory: True
+comment: |
+  Global interview metadata
+variable name: interview_metadata["fdd_annual_renewal"]
+data:
+  al_weaver_version: "1.7.0"
+  generated on: "2022-10-05"
+  title: >-
+    Fdd annual renewal
+  short title: >-
+    Fdd annual renewal
+  description: |-
+    Fdd annual renewal
+  original_form: >-
+    
+  allowed courts: []
+  categories: []
+  typical role: "na"
+  generate download screen: True
+---
+code: |
+  interview_metadata['main_interview_key'] =  'fdd_annual_renewal'
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "TX"
+---
+code: |
+  github_repo_name =  'docassemble-FddAnnualRenewal'
+---
+code: |
+  interview_short_title = "Get a Fdd annual renewal"
+---
+code: |
+  al_form_type = "other" 
+---
+objects:
+  - franchise_seller: ALPeopleList.using(there_are_any=True)
+  - users: ALPeopleList.using(ask_number=True,target_number=1)
+  - former_franchisee: ALPeopleList
+  - signed_franchisee: ALPeopleList
+  - current_franchisee: ALPeopleList
+---
+sections:
+  - review_fdd_annual_renewal: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_fdd_annual_renewal
+code: |
+  # Set the allowed courts for this interview
+  allowed_courts = interview_metadata["fdd_annual_renewal"]["allowed courts"]
+  nav.set_section('review_fdd_annual_renewal')
+  user_role = 'na'
+  changes
+  registered_new_trademarks
+  franchise_sellers
+  goods_services_sold_details
+  signed_franchisee.phone_number
+  set_progress(11)
+  current_franchisees
+  current_trademark_infringements_details
+  public_figures
+  required_fee_changes_details
+  former_franchisee.category
+  set_progress(22)
+  intended_fee_changes_details
+  franchise_seller.additional_reqs
+  upload
+  states
+  active_advertising_fund
+  set_progress(33)
+  wants_new_trademarks_details
+  territory_determined_changes_details
+  public_agency_injunctions
+  has_item_1_changes
+  fee_and_range
+  set_progress(44)
+  has_financials
+  preferred_issuance_date
+  protected_territory_changes_details
+  franchise_seller.address.address
+  item_7_changes_details
+  set_progress(55)
+  rights_reserved_changes_details
+  material_civil_actions
+  unit_system_changes
+  added_patents_copyrights_details
+  bankruptcy_filing
+  set_progress(66)
+  former_franchisee.gather()
+  signed_franchisee.gather()
+  current_franchisee.gather()
+  interview_order_fdd_annual_renewal = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  fdd_annual_renewal_intro
+  interview_order_fdd_annual_renewal
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  fdd_annual_renewal_download
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Fdd_annual_renewal
+continue button field: fdd_annual_renewal_intro
+question: |
+  Fdd annual renewal
+subquestion: |
+  Fdd annual renewal
+---
+id: Screen one
+question: |
+  Screen one
+fields:
+  - "Changes": changes
+  - "Has other changes": has_other_changes
+---
+id: Screen two
+question: |
+  Screen two
+fields:
+  - "Registered new trademarks": registered_new_trademarks
+  - "Registered new trademarks details": registered_new_trademarks_details
+---
+id: Screen three
+question: |
+  Screen three
+fields:
+  - "Franchise sellers": franchise_sellers
+---
+id: Screen four
+question: |
+  Screen four
+fields:
+  - "Goods services sold details": goods_services_sold_details
+  - "Goods services sold": goods_services_sold
+---
+id: Screen five
+question: |
+  Screen five
+fields:
+  - "Signed franchisee.phone number": signed_franchisee.phone_number
+  - "Signed franchisees": signed_franchisees
+  - "Signed franchisee.address.address": signed_franchisee.address.address
+---
+id: Screen six
+question: |
+  Screen six
+fields:
+  - "Current franchisees": current_franchisees
+  - "Current franchisee.address.address": current_franchisee.address.address
+  - "Current franchisee.phone number": current_franchisee.phone_number
+---
+id: Screen seven
+question: |
+  Screen seven
+fields:
+  - "Current trademark infringements details": current_trademark_infringements_details
+  - "Current trademark infringements": current_trademark_infringements
+---
+id: Screen eight
+question: |
+  Screen eight
+fields:
+  - "Public figures": public_figures
+  - "Public figures details": public_figures_details
+---
+id: Screen nine
+question: |
+  Screen nine
+fields:
+  - "Required fee changes details": required_fee_changes_details
+  - "Required fee changes": required_fee_changes
+---
+id: Screen ten
+question: |
+  Screen ten
+fields:
+  - "Former franchisee.category": former_franchisee.category
+  - "Former franchisees": former_franchisees
+  - "Former franchisee.address.address": former_franchisee.address.address
+  - "Former franchisee.phone number": former_franchisee.phone_number
+---
+id: Screen 11
+question: |
+  Screen 11
+fields:
+  - "Intended fee changes details": intended_fee_changes_details
+  - "Intended fee changes": intended_fee_changes
+---
+id: Screen 12
+question: |
+  Screen 12
+fields:
+  - "Franchise seller.additional reqs": franchise_seller.additional_reqs
+---
+id: Screen 13
+question: |
+  Screen 13
+fields:
+  - "Upload": upload
+---
+id: Screen 14
+question: |
+  Screen 14
+fields:
+  - "States": states
+---
+id: Screen 15
+question: |
+  Screen 15
+fields:
+  - "Active advertising fund": active_advertising_fund
+  - "Expense type": expense_type
+  - "Expense type.percentage": expense_type.percentage
+  - "Expense total amount": expense_total_amount
+    datatype: currency
+    min: 0
+  - "Expense types": expense_types
+---
+id: Screen 16
+question: |
+  Screen 16
+fields:
+  - "Wants new trademarks details": wants_new_trademarks_details
+  - "Wants new trademarks": wants_new_trademarks
+---
+id: Screen 17
+question: |
+  Screen 17
+fields:
+  - "Territory determined changes details": territory_determined_changes_details
+  - "Territory determined changes": territory_determined_changes
+---
+id: Screen 18
+question: |
+  Screen 18
+fields:
+  - "Public agency injunctions": public_agency_injunctions
+  - "Public agency injunctions details": public_agency_injunctions_details
+---
+id: Screen 19
+question: |
+  Screen 19
+fields:
+  - "Has item 1 changes": has_item_1_changes
+  - "Item 1 changes details": item_1_changes_details
+---
+id: Screen 20
+question: |
+  Screen 20
+fields:
+  - "Fee and range": fee_and_range
+  - "Not uniform": not_uniform
+---
+id: Screen 21
+question: |
+  Screen 21
+fields:
+  - "Has financials": has_financials
+---
+id: Screen 22
+question: |
+  Screen 22
+fields:
+  - "Date of Preferred issuance": preferred_issuance_date
+    datatype: date
+  - "Preferred": preferred
+---
+id: Screen 23
+question: |
+  Screen 23
+fields:
+  - "Protected territory changes details": protected_territory_changes_details
+  - "Protected territory changes": protected_territory_changes
+---
+id: Screen 24
+question: |
+  Screen 24
+fields:
+  - "Franchise seller.address.address": franchise_seller.address.address
+  - "Franchise seller.name.first": franchise_seller.name.first
+---
+id: Screen 25
+question: |
+  Screen 25
+fields:
+  - "Item 7 changes details": item_7_changes_details
+  - "Has item 7 changes": has_item_7_changes
+---
+id: Screen 26
+question: |
+  Screen 26
+fields:
+  - "Rights reserved changes details": rights_reserved_changes_details
+  - "Rights reserved changes": rights_reserved_changes
+---
+id: Screen 27
+question: |
+  Screen 27
+fields:
+  - "Material civil actions": material_civil_actions
+  - "Material civil actions details": material_civil_actions_details
+---
+id: Screen 28
+question: |
+  Screen 28
+fields:
+  - "Unit system changes": unit_system_changes
+  - "Unit system changes details": unit_system_changes_details
+---
+id: Screen 29
+question: |
+  Screen 29
+fields:
+  - "Added patents copyrights details": added_patents_copyrights_details
+  - "Added patents copyrights": added_patents_copyrights
+---
+id: Screen 30
+question: |
+  Screen 30
+fields:
+  - "Bankruptcy filing": bankruptcy_filing
+---
+id: preview fdd_annual_renewal
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_recipient_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_fdd_annual_renewal'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: fdd_annual_renewal_preview_question    
+---
+code: |
+  signature_fields = []
+---
+id: fdd annual renewal review screen
+event: review_fdd_annual_renewal
+question: |
+  Review your answers
+review:
+  - Edit: changes
+    button: |
+      **Changes**:
+      ${ changes }
+  - Edit: registered_new_trademarks
+    button: |
+      **Registered new trademarks**:
+      ${ registered_new_trademarks }
+  - Edit: franchise_sellers
+    button: |
+      **Franchise sellers**:
+      ${ franchise_sellers }
+  - Edit: goods_services_sold_details
+    button: |
+      **Goods services sold details**:
+      ${ goods_services_sold_details }
+  - Edit: signed_franchisee.revisit
+    button: |
+      **Signed franchisee**
+
+      % for item in signed_franchisee:
+        * ${ item }
+      % endfor
+  - Edit: former_franchisee.revisit
+    button: |
+      **Former franchisee**
+
+      % for item in former_franchisee:
+        * ${ item }
+      % endfor
+  - Edit: current_franchisees
+    button: |
+      **Current franchisees**:
+      ${ current_franchisees }
+  - Edit: current_trademark_infringements_details
+    button: |
+      **Current trademark infringements details**:
+      ${ current_trademark_infringements_details }
+  - Edit: public_figures
+    button: |
+      **Public figures**:
+      ${ public_figures }
+  - Edit: has_other_changes
+    button: |
+      **Has other changes**:
+      ${ has_other_changes }
+  - Edit: goods_services_sold
+    button: |
+      **Goods services sold**:
+      ${ goods_services_sold }
+  - Edit: required_fee_changes_details
+    button: |
+      **Required fee changes details**:
+      ${ required_fee_changes_details }
+  - Edit: intended_fee_changes_details
+    button: |
+      **Intended fee changes details**:
+      ${ intended_fee_changes_details }
+  - Edit: public_figures_details
+    button: |
+      **Public figures details**:
+      ${ public_figures_details }
+  - Edit: current_franchisee.revisit
+    button: |
+      **Current franchisee**
+
+      % for item in current_franchisee:
+        * ${ item }
+      % endfor
+  - Edit: franchise_seller.revisit
+    button: |
+      **Franchise seller**
+
+      % for item in franchise_seller:
+        * ${ item }
+      % endfor
+  - Edit: upload
+    button: |
+      **Upload**:
+      ${ upload }
+  - Edit: active_advertising_fund
+    button: |
+      **Active advertising fund**:
+      ${ active_advertising_fund }
+  - Edit: current_trademark_infringements
+    button: |
+      **Current trademark infringements**:
+      ${ current_trademark_infringements }
+  - Edit: wants_new_trademarks_details
+    button: |
+      **Wants new trademarks details**:
+      ${ wants_new_trademarks_details }
+  - Edit: public_agency_injunctions
+    button: |
+      **Public agency injunctions**:
+      ${ public_agency_injunctions }
+  - Edit: registered_new_trademarks_details
+    button: |
+      **Registered new trademarks details**:
+      ${ registered_new_trademarks_details }
+  - Edit: fee_and_range
+    button: |
+      **Fee and range**:
+      ${ fee_and_range }
+  - Edit: expense_type
+    button: |
+      **Expense type**:
+      ${ expense_type }
+  - Edit: has_item_1_changes
+    button: |
+      **Has item 1 changes**:
+      ${ has_item_1_changes }
+  - Edit: has_financials
+    button: |
+      **Has financials**:
+      ${ has_financials }
+  - Edit: preferred_issuance_date
+    button: |
+      **Date of Preferred issuance**:
+      ${ preferred_issuance_date }
+  - Edit: protected_territory_changes_details
+    button: |
+      **Protected territory changes details**:
+      ${ protected_territory_changes_details }
+  - Edit: preferred
+    button: |
+      **Preferred**:
+      ${ preferred }
+  - Edit: item_7_changes_details
+    button: |
+      **Item 7 changes details**:
+      ${ item_7_changes_details }
+  - Edit: expense_type.percentage
+    button: |
+      **Expense type.percentage**:
+      ${ expense_type.percentage }
+  - Edit: signed_franchisees
+    button: |
+      **Signed franchisees**:
+      ${ signed_franchisees }
+  - Edit: material_civil_actions
+    button: |
+      **Material civil actions**:
+      ${ material_civil_actions }
+  - Edit: former_franchisees
+    button: |
+      **Former franchisees**:
+      ${ former_franchisees }
+  - Edit: material_civil_actions_details
+    button: |
+      **Material civil actions details**:
+      ${ material_civil_actions_details }
+  - Edit: public_agency_injunctions_details
+    button: |
+      **Public agency injunctions details**:
+      ${ public_agency_injunctions_details }
+  - Edit: not_uniform
+    button: |
+      **Not uniform**:
+      ${ not_uniform }
+  - Edit: unit_system_changes
+    button: |
+      **Unit system changes**:
+      ${ unit_system_changes }
+  - Edit: rights_reserved_changes_details
+    button: |
+      **Rights reserved changes details**:
+      ${ rights_reserved_changes_details }
+  - Edit: item_1_changes_details
+    button: |
+      **Item 1 changes details**:
+      ${ item_1_changes_details }
+  - Edit: bankruptcy_filing
+    button: |
+      **Bankruptcy filing**:
+      ${ bankruptcy_filing }
+  - Edit: expense_total_amount
+    button: |
+      **Expense total amount**:
+      ${ currency(expense_total_amount) }
+  - Edit: required_fee_changes
+    button: |
+      **Required fee changes**:
+      ${ required_fee_changes }
+  - Edit: added_patents_copyrights_details
+    button: |
+      **Added patents copyrights details**:
+      ${ added_patents_copyrights_details }
+  - Edit: intended_fee_changes
+    button: |
+      **Intended fee changes**:
+      ${ intended_fee_changes }
+  - Edit: has_item_7_changes
+    button: |
+      **Has item 7 changes**:
+      ${ has_item_7_changes }
+  - Edit: protected_territory_changes
+    button: |
+      **Protected territory changes**:
+      ${ protected_territory_changes }
+  - Edit: rights_reserved_changes
+    button: |
+      **Rights reserved changes**:
+      ${ rights_reserved_changes }
+  - Edit: wants_new_trademarks
+    button: |
+      **Wants new trademarks**:
+      ${ wants_new_trademarks }
+  - Edit: added_patents_copyrights
+    button: |
+      **Added patents copyrights**:
+      ${ added_patents_copyrights }
+  - Edit: states
+    button: |
+      **States**:
+      ${ states }
+  - Edit: unit_system_changes_details
+    button: |
+      **Unit system changes details**:
+      ${ unit_system_changes_details }
+  - Edit: expense_types
+    button: |
+      **Expense types**:
+      ${ expense_types }
+  - Edit: territory_determined_changes_details
+    button: |
+      **Territory determined changes details**:
+      ${ territory_determined_changes_details }
+  - Edit: territory_determined_changes
+    button: |
+      **Territory determined changes**:
+      ${ territory_determined_changes }
+---
+continue button field: signed_franchisee.revisit
+question: |
+  Edit signed_franchisee
+subquestion: |
+  ${ signed_franchisee.table }
+
+  ${ signed_franchisee.add_action() }
+---
+table: signed_franchisee.table
+rows: signed_franchisee
+columns:
+  - Phone number: |
+      row_item.phone_number if defined("row_item.phone_number") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - phone_number
+  - address.address
+  - name.first
+confirm: True
+
+---
+continue button field: former_franchisee.revisit
+question: |
+  Edit former_franchisee
+subquestion: |
+  ${ former_franchisee.table }
+
+  ${ former_franchisee.add_action() }
+---
+table: former_franchisee.table
+rows: former_franchisee
+columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+  - Category: |
+      row_item.category if defined("row_item.category") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Phone number: |
+      row_item.phone_number if defined("row_item.phone_number") else ""
+edit:
+  - name.first
+  - category
+  - address.address
+  - phone_number
+confirm: True
+
+---
+continue button field: current_franchisee.revisit
+question: |
+  Edit current_franchisee
+subquestion: |
+  ${ current_franchisee.table }
+
+  ${ current_franchisee.add_action() }
+---
+table: current_franchisee.table
+rows: current_franchisee
+columns:
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Phone number: |
+      row_item.phone_number if defined("row_item.phone_number") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - address.address
+  - phone_number
+  - name.first
+confirm: True
+
+---
+continue button field: franchise_seller.revisit
+question: |
+  Edit franchise_seller
+subquestion: |
+  ${ franchise_seller.table }
+
+  ${ franchise_seller.add_action() }
+---
+table: franchise_seller.table
+rows: franchise_seller
+columns:
+  - Additional reqs: |
+      row_item.additional_reqs if defined("row_item.additional_reqs") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - additional_reqs
+  - address.address
+  - name.first
+confirm: True
+
+---
+id: download fdd_annual_renewal
+event: fdd_annual_renewal_download
+question: |
+  All done
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_fdd_annual_renewal'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+objects:
+  - fdd_annual_renewal_post_interview_instructions: ALDocument.using(title="Instructions", filename="fdd_annual_renewal_next_steps.docx", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  - fdd_annual_renewal_attachment: ALDocument.using(title="Fdd annual renewal", filename="fdd_annual_renewal.docx", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+---
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[fdd_annual_renewal_post_interview_instructions,fdd_annual_renewal_attachment], filename="fdd_annual_renewal.docx_package.pdf", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[fdd_annual_renewal_attachment], filename="fdd_annual_renewal.docx_package.pdf", title="All forms to download for your records", enabled=True)
+---
+attachments:
+  - name: fdd annual renewal post interview instructions
+    filename: Post-interview-instructions     
+    variable name: fdd_annual_renewal_post_interview_instructions[i]        
+    skip undefined: True
+    docx template file: fdd_annual_renewal_next_steps.docx
+  - name: fdd annual renewal attachment
+    filename: fdd_annual_renewal.docx     
+    variable name: fdd_annual_renewal_attachment[i]        
+    skip undefined: True
+    docx template file: fdd_annual_renewal.docx
+
+
