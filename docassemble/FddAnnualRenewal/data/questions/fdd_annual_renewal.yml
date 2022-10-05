@@ -50,7 +50,7 @@ code: |
   al_form_type = "other" 
 ---
 objects:
-  - franchise_seller: ALPeopleList.using(there_are_any=True)
+  - franchise_seller: ALPeopleList
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - former_franchisee: ALPeopleList
   - signed_franchisee: ALPeopleList
@@ -68,45 +68,71 @@ code: |
   allowed_courts = interview_metadata["fdd_annual_renewal"]["allowed courts"]
   nav.set_section('review_fdd_annual_renewal')
   user_role = 'na'
-  changes
-  registered_new_trademarks
-  franchise_sellers
-  goods_services_sold_details
-  signed_franchisee.phone_number
-  set_progress(11)
-  current_franchisees
-  current_trademark_infringements_details
-  public_figures
-  required_fee_changes_details
-  former_franchisee.category
-  set_progress(22)
-  intended_fee_changes_details
-  franchise_seller.additional_reqs
-  upload
-  states
-  active_advertising_fund
-  set_progress(33)
-  wants_new_trademarks_details
-  territory_determined_changes_details
-  public_agency_injunctions
-  has_item_1_changes
-  fee_and_range
-  set_progress(44)
-  has_financials
+  
   preferred_issuance_date
-  protected_territory_changes_details
-  franchise_seller.address.address
-  item_7_changes_details
-  set_progress(55)
-  rights_reserved_changes_details
+  
+  if not upload:
+    current_franchisee.gather()
+    former_franchisees.gather(complete_attribute = "former_franchisees_gather_complete")
+    signed_franchisee.gather()
+    
+  set_progress(11)
+  
+  franchise_sellers.gather(complete_attribute = "franchise_sellers_gather_complete")
+  
+  has_item_1_changes
+  
+  set_progress(22)
+  
   material_civil_actions
-  unit_system_changes
-  added_patents_copyrights_details
+  public_agency_injunctions
+  
   bankruptcy_filing
+  
+  set_progress(33)
+  
+  not_uniform
+  
+  required_fee_changes
+  intended_fee_changes
+  
+  set_progress(44)
+  
+  has_item_7_changes
+  
+  set_progress(55)
+  
+  goods_services_sold 
+  unit_system_changes
+  
+  active_advertising_fund
+  
   set_progress(66)
-  former_franchisee.gather()
-  signed_franchisee.gather()
-  current_franchisee.gather()
+  
+  territory_determined_changes
+  protected_territory_changes
+  rights_reserved_changes
+  
+  set_progress(77)
+  
+  registered_new_trademarks
+  wants_new_trademarks
+  current_trademark_infringements
+    
+  added_patents_copyrights 
+  
+  set_progress(88)
+  
+  public_figures
+  
+  states
+  
+  has_financials
+
+  changes
+  
+  set_progress(99)
+
   interview_order_fdd_annual_renewal = True
 ---
 ###################### Main order ######################
@@ -134,95 +160,106 @@ comment: |
 id: Fdd_annual_renewal
 continue button field: fdd_annual_renewal_intro
 question: |
-  Fdd annual renewal
+  FDD Annual Renewal Questionnaire
 subquestion: |
-  Fdd annual renewal
+  TODO
 ---
-id: Screen one
-question: |
-  Screen one
-fields:
-  - "Changes": changes
-  - "Has other changes": has_other_changes
+generic object: ALIndividual
+code: |
+  x.name.first
+  x.address.address
+  x.additional_reqs
+  x.franchise_sellers_gather_complete = True
 ---
-id: Screen two
-question: |
-  Screen two
-fields:
-  - "Registered new trademarks": registered_new_trademarks
-  - "Registered new trademarks details": registered_new_trademarks_details
+generic object: ALIndividual
+code: |
+  x.name.first
+  x.address.address
+  x.category
+  x.former_franchisees_gather_complete = True
 ---
-id: Screen three
+id: other changes
 question: |
-  Screen three
+  Any other changes
+subquestion: |
+  If you are considering any other changes to your franchise agreement or other franchise documents, please note them here. We will reach out to discuss these in more details as necessary.       Item 17 in your FDD is a great cheatsheet to review your terms and identify any revisions needed.
 fields:
-  - "Franchise sellers": franchise_sellers
+  - "Do you have any other changes?": has_other_changes
+    datatype: yesnoradio
+  - "What are the changes?": changes
+    show if: has_other_changes
 ---
-id: Screen four
+id: registered any new trademarks 
 question: |
-  Screen four
+  Have you registered any new trademarks for the system?
 fields:
-  - "Goods services sold details": goods_services_sold_details
-  - "Goods services sold": goods_services_sold
+  - "no label": registered_new_trademarks
+    datatype: yesnoradio
+  - "Add details": registered_new_trademarks_details
+    show if: registered_new_trademarks
 ---
-id: Screen five
+id: goods services sold
 question: |
-  Screen five
+  Did you or any affiliates sell any goods or services to your franchisees during the fiscal year?
 fields:
-  - "Signed franchisee.phone number": signed_franchisee.phone_number
-  - "Signed franchisees": signed_franchisees
-  - "Signed franchisee.address.address": signed_franchisee.address.address
+  - "no label": goods_services_sold
+    datatype: yesnoradio
+  - "Add details": goods_services_sold_details
+    show if: goods_services_sold
 ---
-id: Screen six
+id: item 13
 question: |
-  Screen six
+  Are you aware of any current trademark infringements anywhere?
 fields:
-  - "Current franchisees": current_franchisees
-  - "Current franchisee.address.address": current_franchisee.address.address
-  - "Current franchisee.phone number": current_franchisee.phone_number
+  - "no label": current_trademark_infringements
+    datatype: yesnoradio
+  - "Add details": current_trademark_infringements_details
+    show if: current_trademark_infringements
 ---
-id: Screen seven
+id: item 18
 question: |
-  Screen seven
+  Have you used any public figures to promote the franchise system?
 fields:
-  - "Current trademark infringements details": current_trademark_infringements_details
-  - "Current trademark infringements": current_trademark_infringements
+  - "no label": public_figures
+    datatype: yesnoradio
+  - "Add details": public_figures_details
+    show if: public_figures
 ---
-id: Screen eight
+id: item 6
 question: |
-  Screen eight
+  Are there any required changes in the fees you charge to franchisees listed in Item 6?
 fields:
-  - "Public figures": public_figures
-  - "Public figures details": public_figures_details
+  - "no label": required_fee_changes
+    datatype: yesnoradio
+  - "Add details": required_fee_changes_details
+    show if: required_fee_changes
 ---
-id: Screen nine
+id: former franchisee category
 question: |
-  Screen nine
-fields:
-  - "Required fee changes details": required_fee_changes_details
-  - "Required fee changes": required_fee_changes
+  What is the appropriate category for ${x.name}?
+field: x.category
+choices:
+  - Transferred
+  - Terminated
+  - Not renewed
+  - Reacquired by franchisor
+  - Otherwise left system.
 ---
-id: Screen ten
+id: item 6
 question: |
-  Screen ten
+  Do you need to add any new fees which you starting charging or intend to charge franchisees?
 fields:
-  - "Former franchisee.category": former_franchisee.category
-  - "Former franchisees": former_franchisees
-  - "Former franchisee.address.address": former_franchisee.address.address
-  - "Former franchisee.phone number": former_franchisee.phone_number
+  - "no label": intended_fee_changes
+    datatype: yesnoradio
+  - "Add details": intended_fee_changes_details
+    show if: intended_fee_changes
 ---
-id: Screen 11
+id: additional questions 
 question: |
-  Screen 11
+  List any additional questions for ${ x.name } required by certain states.
 fields:
-  - "Intended fee changes details": intended_fee_changes_details
-  - "Intended fee changes": intended_fee_changes
----
-id: Screen 12
-question: |
-  Screen 12
-fields:
-  - "Franchise seller.additional reqs": franchise_seller.additional_reqs
+  - no label: x.additional_reqs
+    input type: area
 ---
 id: Screen 13
 question: |
@@ -311,9 +348,11 @@ fields:
   - "Franchise seller.address.address": franchise_seller.address.address
   - "Franchise seller.name.first": franchise_seller.name.first
 ---
-id: Screen 25
+id: item 7
 question: |
-  Screen 25
+  Any changes in Item 7?
+subquestion: |
+  Review your total initial investment (Item 7) based on your experiences in opening any new corporate or franchised locations last year and upon any current market conditions to ensure that this initial investment is still accurate.
 fields:
   - "Item 7 changes details": item_7_changes_details
   - "Has item 7 changes": has_item_7_changes
