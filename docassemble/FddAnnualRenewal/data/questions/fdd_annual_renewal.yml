@@ -289,11 +289,11 @@ question: |
   What is the appropriate category for ${x}?
 field: x.category
 choices:
-  - Transferred: transferred
-  - Terminated: terminated
-  - Not renewed: not_renewed
-  - Reacquired by franchisor: reacquired_by_franchisor
-  - Otherwise left system: otherwise_left_system
+  - Transferred
+  - Terminated
+  - Not renewed
+  - Reacquired by franchisor
+  - Otherwise left system
 ---
 id: item 6
 question: |
