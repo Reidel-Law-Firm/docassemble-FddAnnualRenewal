@@ -104,7 +104,9 @@ code: |
   
   set_progress(55)
   
-  goods_services_sold 
+  if goods_services_sold:
+    sale[0].what
+    revenue_total = sum(s.revenue for s in sale)
   unit_system_changes
   
   active_advertising_fund
@@ -229,11 +231,11 @@ fields:
 ---
 id: other changes
 question: |
-  Any other changes
+  Do you have any other changes?
 subquestion: |
   If you are considering any other changes to your franchise agreement or other franchise documents, please note them here. We will reach out to discuss these in more details as necessary.       Item 17 in your FDD is a great cheatsheet to review your terms and identify any revisions needed.
 fields:
-  - "Do you have any other changes?": has_other_changes
+  - "no label": has_other_changes
     datatype: yesnoradio
   - "What are the changes?": changes
     show if: has_other_changes
@@ -253,8 +255,22 @@ question: |
 fields:
   - "no label": goods_services_sold
     datatype: yesnoradio
-  - "Add details": goods_services_sold_details
-    show if: goods_services_sold
+---
+objects:
+  - sale: DAList.using(object_type=DAObject, there_are_any=True)
+---
+id: sales
+question: |
+  What was the total revenue, not profits, from your sale(s) in the last fiscal year? 
+subquestion: |
+  If your affiliates sold any goods or services to franchisees, please provide the product/service revenue and the total revenue for the last fiscal year.
+  
+  If you are making multiple claims, you can select "${word("Add another")}" to add more than one.
+fields: 
+  - Briefly describe your item: sale[i].what
+  - Item revenue: sale[i].revenue
+    datatype: currency
+list collect: True
 ---
 id: item 13
 question: |
