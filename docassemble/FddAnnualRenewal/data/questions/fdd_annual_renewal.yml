@@ -50,18 +50,19 @@ code: |
   al_form_type = "other" 
 ---
 objects:
-  - franchise_seller: ALPeopleList
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - former_franchisee: ALPeopleList
   - signed_franchisee: ALPeopleList
   - current_franchisee: ALPeopleList
+  - franchise_seller: ALPeopleList
+  - franchise_seller[i].employment: DAList.using(object_type=DAObject)
+  - employment: DAList.using(object_type=DAObject)
+  - sale: DAList.using(object_type=DAObject)
 ---
 sections:
   - review_fdd_annual_renewal: Review your answers
 ---
 #################### Interview order #####################
-comment: |
-  Controls order and branching logic for questions specific to this form
 id: interview_order_fdd_annual_renewal
 code: |
   # Set the allowed courts for this interview
@@ -168,6 +169,14 @@ subquestion: |
   TODO
 ---
 id: who will be on this form
+generic object: DAObject
+question: |
+  Does ${x} have an employment history in the past five years?
+fields:
+  - no label: x.employment.there_are_any
+    datatype: yesnoradio
+---
+id: who will be on this form
 generic object: ALPeopleList
 question: |
   Do you have any ${noun_plural(x.object_name())} to add?
@@ -183,7 +192,7 @@ code: |
 generic object: ALIndividual
 code: |
   x.phone_number
-  x.additional_reqs
+  x.employment.gather()
   x.gather_complete_2 = True
 ---
 generic object: ALIndividual
@@ -233,7 +242,8 @@ id: other changes
 question: |
   Do you have any other changes?
 subquestion: |
-  If you are considering any other changes to your franchise agreement or other franchise documents, please note them here. We will reach out to discuss these in more details as necessary.       Item 17 in your FDD is a great cheatsheet to review your terms and identify any revisions needed.
+  If you are considering any other changes to your franchise agreement or other franchise documents, please note them here. We will reach out to discuss these in more details as necessary.       
+  Item 17 in your FDD is a great cheatsheet to review your terms and identify any revisions needed.
 fields:
   - "no label": has_other_changes
     datatype: yesnoradio
@@ -256,8 +266,24 @@ fields:
   - "no label": goods_services_sold
     datatype: yesnoradio
 ---
-objects:
-  - sale: DAList.using(object_type=DAObject, there_are_any=True)
+id: placeholder
+question: | 
+  Does ${x} have another employer?
+yesno: x.employment.there_is_another
+---
+id: employment
+generic object: DAObject
+question: |
+  What is ${x}'s employment history?
+subquestion: |
+  List all employment during the past five years.
+fields: 
+  - Employer name: x.employment.employer
+  - Position held: x.employment.position
+  - Start date: x.employment.start
+    datatype: date
+  - End date: x.employment.end
+    datatype: date
 ---
 id: sales
 question: |
@@ -265,7 +291,7 @@ question: |
 subquestion: |
   If your affiliates sold any goods or services to franchisees, please provide the product/service revenue and the total revenue for the last fiscal year.
   
-  If you are making multiple claims, you can select "${word("Add another")}" to add more than one.
+  You can select "${word("Add another")}" to add more than one.
 fields: 
   - Briefly describe your item: sale[i].what
   - Item revenue: sale[i].revenue
@@ -320,14 +346,6 @@ fields:
   - "Add details": intended_fee_changes_details
     show if: intended_fee_changes
 ---
-id: additional questions 
-generic object: ALIndividual
-question: |
-  List any additional questions for ${ x } required by certain states.
-fields:
-  - no label: x.additional_reqs
-    input type: area
----
 id: Upload documents
 question: |
   Upload documents
@@ -349,7 +367,23 @@ question: |
   Which state will want to register in or renew this year? 
 fields:
   - State: states
-    code: states_list()
+    datatype: checkboxes
+    none of the above: False
+    choices: 
+      - California
+      - Hawaii
+      - Illinois
+      - Indiana
+      - Maryland
+      - Michigan
+      - Minnesota
+      - New York
+      - North Dakota
+      - Rhode Island
+      - South Dakota
+      - Virginia
+      - Washington
+      - Wisconsin
 ---
 id: advertising
 question: |
@@ -849,14 +883,11 @@ subquestion: |
 table: franchise_seller.table
 rows: franchise_seller
 columns:
-  - Additional reqs: |
-      row_item.additional_reqs if defined("row_item.additional_reqs") else ""
   - Address: |
       row_item.address.block() if defined("row_item.address.address") else ""
   - Name: |
       row_item.name.full() if defined("row_item.name.first") else ""
 edit:
-  - additional_reqs
   - address.address
   - name.first
 confirm: True
