@@ -55,8 +55,8 @@ objects:
   - signed_franchisee: ALPeopleList
   - current_franchisee: ALPeopleList
   - franchise_seller: ALPeopleList
-  - franchise_seller[i].employment: DAList.using(object_type=DAObject)
-  - employment: DAList.using(object_type=DAObject)
+  - franchise_seller[i].employment[j]: DAList.using(object_type=Thing)
+  - employment: DAList.using(object_type=Thing)
   - sale: DAList.using(object_type=DAObject)
 ---
 sections:
@@ -159,22 +159,12 @@ code: |
   )
   fdd_annual_renewal_download
 ---
-comment: |
-  This question is used to introduce your interview. Please customize
 id: Fdd_annual_renewal
 continue button field: fdd_annual_renewal_intro
 question: |
   FDD Annual Renewal Questionnaire
 subquestion: |
   TODO
----
-id: who will be on this form
-generic object: DAObject
-question: |
-  Does ${x} have an employment history in the past five years?
-fields:
-  - no label: x.employment.there_are_any
-    datatype: yesnoradio
 ---
 id: who will be on this form
 generic object: ALPeopleList
@@ -189,10 +179,11 @@ code: |
   x.phone_number
   x.gather_complete = True
 ---
-generic object: ALIndividual
+generic object: DAObject
 code: |
   x.phone_number
-  x.employment.gather()
+  if franchise_seller[i].employment[j].there_are_any:
+    franchise_seller[i].employment[j].gather()
   x.gather_complete_2 = True
 ---
 generic object: ALIndividual
@@ -200,6 +191,34 @@ code: |
   x.phone_number
   x.category
   x.gather_complete_1 = True
+---
+id: placeholder
+generic object: DAObject
+question: | 
+  Does ${x} have another employer?
+yesno: franchise_seller.employment.there_is_another
+---
+id: who will be on this form
+generic object: DAObject
+question: |
+  Does ${x} have an employment history in the past five years?
+fields:
+  - no label: franchise_seller.employment.there_are_any
+    datatype: yesnoradio
+---
+id: employment
+generic object: DAObject
+question: |
+  What is ${x}'s employment history?
+subquestion: |
+  List all employment during the past five years.
+fields: 
+  - Employer name: franchise_seller[i].employment[j].employer
+  - Position held: franchise_seller[i].employment[j].position
+  - Start date: franchise_seller[i].employment[j].start
+    datatype: date
+  - End date: franchise_seller[i].employment[j].end
+    datatype: date
 ---
 generic object: ALPeopleList
 id: any other people
@@ -265,25 +284,6 @@ question: |
 fields:
   - "no label": goods_services_sold
     datatype: yesnoradio
----
-id: placeholder
-question: | 
-  Does ${x} have another employer?
-yesno: x.employment.there_is_another
----
-id: employment
-generic object: DAObject
-question: |
-  What is ${x}'s employment history?
-subquestion: |
-  List all employment during the past five years.
-fields: 
-  - Employer name: x.employment.employer
-  - Position held: x.employment.position
-  - Start date: x.employment.start
-    datatype: date
-  - End date: x.employment.end
-    datatype: date
 ---
 id: sales
 question: |
