@@ -54,10 +54,13 @@ objects:
   - former_franchisee: ALPeopleList
   - signed_franchisee: ALPeopleList
   - current_franchisee: ALPeopleList
-  - franchise_seller: ALPeopleList
-  - franchise_seller[i].employment[j]: DAList.using(object_type=Thing)
-  - employment: DAList.using(object_type=Thing)
   - sale: DAList.using(object_type=DAObject)
+---
+objects: 
+  - franchise_seller: ALPeopleList
+---
+objects:
+  - franchise_seller[i].employment: DAList.using(object_type=DAObject)
 ---
 sections:
   - review_fdd_annual_renewal: Review your answers
@@ -181,9 +184,13 @@ code: |
 ---
 generic object: DAObject
 code: |
+  x.employer
+  x.gather_complete_3 = True
+---
+generic object: DAObject
+code: |
   x.phone_number
-  if franchise_seller[i].employment[j].there_are_any:
-    franchise_seller[i].employment[j].gather()
+  x.employment.gather(complete_attribute = "gather_complete_3")
   x.gather_complete_2 = True
 ---
 generic object: ALIndividual
@@ -196,14 +203,14 @@ id: placeholder
 generic object: DAObject
 question: | 
   Does ${x} have another employer?
-yesno: franchise_seller.employment.there_is_another
+yesno: franchise_seller[i].employment.there_is_another
 ---
 id: who will be on this form
 generic object: DAObject
 question: |
   Does ${x} have an employment history in the past five years?
 fields:
-  - no label: franchise_seller.employment.there_are_any
+  - no label: franchise_seller[i].employment.there_are_any
     datatype: yesnoradio
 ---
 id: employment
@@ -213,11 +220,11 @@ question: |
 subquestion: |
   List all employment during the past five years.
 fields: 
-  - Employer name: franchise_seller[i].employment[j].employer
-  - Position held: franchise_seller[i].employment[j].position
-  - Start date: franchise_seller[i].employment[j].start
+  - Employer name: x.employer
+  - Position held: x.position
+  - Start date: x.start
     datatype: date
-  - End date: franchise_seller[i].employment[j].end
+  - End date: x.end
     datatype: date
 ---
 generic object: ALPeopleList
@@ -364,9 +371,9 @@ fields:
 ---
 id: states
 question: |
-  Which state will want to register in or renew this year? 
+  Which state(s) will want to register in or renew this year? 
 fields:
-  - State: states
+  - no label: states
     datatype: checkboxes
     none of the above: False
     choices: 
