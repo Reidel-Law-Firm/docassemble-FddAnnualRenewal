@@ -259,7 +259,7 @@ sets:
   - x.name.first
   - x.name.last
 question:  |
-  ${ noun_plural(x.object_name()) } Basic Information
+  ${ noun_plural(x.object_name()).capitalize() } Basic Information
 fields:
   - code: |
       x.name_fields(person_or_business='unsure')
