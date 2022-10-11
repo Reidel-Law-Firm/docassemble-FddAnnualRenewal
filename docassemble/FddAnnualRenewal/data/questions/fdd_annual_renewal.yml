@@ -62,6 +62,9 @@ objects:
 objects:
   - franchise_seller[i].employment: DAList.using(object_type=DAObject)
 ---
+objects:
+  - employment: DAList.using(object_type=DAObject)
+---
 sections:
   - review_fdd_annual_renewal: Review your answers
 ---
