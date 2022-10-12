@@ -172,12 +172,36 @@ question: |
 subquestion: |
   TODO
 ---
-id: who will be on this form
+id: any current franchisees
 generic object: ALPeopleList
 question: |
-  Do you have any ${noun_plural(x.object_name())} to add?
+  Do you have any current franchisees to add?
 fields:
-  - no label: x.there_are_any
+  - no label: current_franchisee.there_are_any
+    datatype: yesnoradio
+---
+id: any former franchisee
+generic object: ALPeopleList
+question: |
+  Do you have any former franchisees to add?
+fields:
+  - no label: former_franchisee.there_are_any
+    datatype: yesnoradio
+---
+id: any signed franchisee
+generic object: ALPeopleList
+question: |
+  Do you have any signed franchisees to add?
+fields:
+  - no label: signed_franchisee.there_are_any
+    datatype: yesnoradio
+---
+id: any franchise seller
+generic object: ALPeopleList
+question: |
+  Do you have any franchise sellers to add?
+fields:
+  - no label: franchise_seller.there_are_any
     datatype: yesnoradio
 ---
 generic object: ALIndividual
@@ -205,7 +229,15 @@ code: |
 id: placeholder
 generic object: DAObject
 question: | 
-  Does ${x} have another employer?
+  Does ${x} have another employer from the past five years?
+subquestion: |
+  So far you have told us about:
+  
+  Name | Position | Start | End
+  -----------|------------|------------|------------
+  % for x in franchise_seller[i].employment:
+  ${ x.employer } | ${ x.position } | ${ x.start } | ${ x.end }
+  % endfor
 yesno: franchise_seller[i].employment.there_is_another
 ---
 id: who will be on this form
@@ -234,6 +266,12 @@ generic object: ALPeopleList
 id: any other people
 question: |
   Are there any other ${ noun_plural(x.object_name()) }?
+subquestion: |
+  So far you have told us about:
+
+  % for item in x:
+  1. ${ item }
+  % endfor
 fields:
   - no label: x.there_is_another
     datatype: yesnoradio
@@ -253,19 +291,61 @@ template: x.business_choice_label
 content: |
   Organization
 ---
-id: basic info
+id: current franchisee basic info
 generic object: ALIndividual
 sets:
-  - x.name.first
-  - x.name.last
+  - current_franchisee.name.first
+  - current_franchisee.name.last
 question:  |
-  ${ noun_plural(x.object_name()).capitalize() } Basic Information
+  ${ ordinal(i).capitalize() } Current Franchisee's Basic Information
 fields:
   - code: |
-      x.name_fields(person_or_business='unsure')
+      current_franchisee[i].name_fields(person_or_business='unsure')
   - code: |
-      x.address_fields(show_country=True)
-  - Phone number: x.phone_number
+      current_franchisee[i].address_fields(show_country=True)
+  - Phone number: current_franchisee[i].phone_number
+---
+id: signed franchisee basic info
+generic object: ALIndividual
+sets:
+  - signed_franchisee.name.first
+  - signed_franchisee.name.last
+question:  |
+  ${ ordinal(i).capitalize() } Signed Franchisee's Basic Information
+fields:
+  - code: |
+      signed_franchisee[i].name_fields(person_or_business='unsure')
+  - code: |
+      signed_franchisee[i].address_fields(show_country=True)
+  - Phone number: signed_franchisee[i].phone_number
+---
+id: former franchisee basic info
+generic object: ALIndividual
+sets:
+  - former_franchisee.name.first
+  - former_franchisee.name.last
+question:  |
+  ${ ordinal(i).capitalize() } Former Franchisee's Basic Information
+fields:
+  - code: |
+      former_franchisee[i].name_fields(person_or_business='unsure')
+  - code: |
+      former_franchisee[i].address_fields(show_country=True)
+  - Phone number: former_franchisee[i].phone_number
+---
+id: franchise seller basic info
+generic object: ALIndividual
+sets:
+  - franchise_seller.name.first
+  - franchise_seller.name.last
+question:  |
+  ${ ordinal(i).capitalize() } Franchise Seller's Basic Information
+fields:
+  - code: |
+      franchise_seller[i].name_fields(person_or_business='unsure')
+  - code: |
+      franchise_seller[i].address_fields(show_country=True)
+  - Phone number: franchise_seller[i].phone_number
 ---
 id: other changes
 question: |
