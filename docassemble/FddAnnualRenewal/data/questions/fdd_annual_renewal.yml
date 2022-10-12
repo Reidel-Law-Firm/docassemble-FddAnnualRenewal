@@ -384,10 +384,24 @@ subquestion: |
   
   Party names | Forum | Case or proceeding identification number 
   -----------|------------|------------
-  % for x in franchise_seller[i].actions:
+  % for x in franchise_seller[i].convictions:
   ${ x.party_names } | ${ x.action } | ${ x.number } 
   % endfor
-yesno: franchise_seller[i].actions.there_is_another
+yesno: franchise_seller[i].convictions.there_is_another
+---
+id: injunctions review
+generic object: DAObject
+question: | 
+  Does ${x} have another injunction?
+subquestion: |
+  So far you have told us about:
+  
+  Name of the person | Public agency or court | Case or proceeding identification number 
+  -----------|------------|------------
+  % for x in franchise_seller[i].injunctions:
+  ${ x.person } | ${ x.court } | ${ x.number } 
+  % endfor
+yesno: franchise_seller[i].injunctions.there_is_another
 ---
 generic object: ALPeopleList
 id: any other people
