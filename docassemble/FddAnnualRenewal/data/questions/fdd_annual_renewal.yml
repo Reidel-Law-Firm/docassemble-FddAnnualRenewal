@@ -66,11 +66,16 @@ objects:
   - franchise_seller[i].actions: DAList.using(object_type=DAObject)
 ---
 objects:
+  - franchise_seller[i].convictions: DAList.using(object_type=DAObject)
+---
+objects:
   - employment: DAList.using(object_type=DAObject)
 ---
 objects:
   - actions: DAList.using(object_type=DAObject)
 ---
+objects:
+  - convictions: DAList.using(object_type=DAObject)
 ---
 sections:
   - review_fdd_annual_renewal: Review your answers
@@ -228,9 +233,15 @@ code: |
 ---
 generic object: DAObject
 code: |
+  x.action
+  x.gather_complete_5 = True
+---
+generic object: DAObject
+code: |
   x.phone_number
   x.employment.gather(complete_attribute = "gather_complete_3")
   x.actions.gather(complete_attribute = "gather_complete_4")
+  x.convictions.gather(complete_attribute = "gather_complete_5")
   x.gather_complete_2 = True
 ---
 generic object: ALIndividual
@@ -272,6 +283,17 @@ fields:
   - Forum, nature and current status of the pending action: x.action
   - Case or proceeding identification number: x.number
 ---
+id: convictions
+generic object: DAObject
+question: |
+  Convictions and Liabilities
+subquestion: |
+  During the 10-year period immediately before the disclosure document’s issuance date, had ${x} been convicted of or pleaded nolo contendere to a felony charge; or been held liable in a civil action involving an alleged violation of a franchise, antitrust or securities law, or allegations of fraud, unfair or deceptive practices, or comparable allegations?
+fields: 
+  - Party names: x.party_names
+  - Forum: x.action
+  - Case or proceeding identification number: x.number
+---
 id: employment
 generic object: DAObject
 question: |
@@ -304,6 +326,30 @@ subquestion: |
   So far you have told us about:
   
   Party names | Forum, nature and current status of the pending action | Case or proceeding identification number 
+  -----------|------------|------------
+  % for x in franchise_seller[i].actions:
+  ${ x.party_names } | ${ x.action } | ${ x.number } 
+  % endfor
+yesno: franchise_seller[i].actions.there_is_another
+---
+id: convictions pending
+generic object: DAObject
+question: |
+  Convictions and Liabilities
+subquestion: |
+  During the 10-year period immediately before the disclosure document’s issuance date, had ${x} been convicted of or pleaded nolo contendere to a felony charge; or been held liable in a civil action involving an alleged violation of a franchise, antitrust or securities law, or allegations of fraud, unfair or deceptive practices, or comparable allegations?
+fields:
+  - no label: franchise_seller[i].convictions.there_are_any
+    datatype: yesnoradio
+---
+id: convictions review
+generic object: DAObject
+question: | 
+  Does ${x} have another conviction or liability?
+subquestion: |
+  So far you have told us about:
+  
+  Party names | Forum | Case or proceeding identification number 
   -----------|------------|------------
   % for x in franchise_seller[i].actions:
   ${ x.party_names } | ${ x.action } | ${ x.number } 
