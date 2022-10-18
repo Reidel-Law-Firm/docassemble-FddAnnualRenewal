@@ -269,10 +269,10 @@ question: |
 subquestion: |
   So far you have told us about:
   
-  Name | Position | Start | End
-  -----------|------------|------------|------------
+  Name | Position | 
+  -----------|------------|
   % for x in franchise_seller[i].employment:
-  ${ x.employer } | ${ x.position } | ${ x.start } | ${ x.end }
+  ${ x.employer } | ${ x.position } | 
   % endfor
 yesno: franchise_seller[i].employment.there_is_another
 ---
@@ -340,6 +340,9 @@ fields:
     datatype: date
   - End date: x.end
     datatype: date
+    hide if: x.present_employer
+  - Present employer: x.present_employer
+    datatype: yesno
 ---
 id: action pending
 generic object: DAObject
@@ -507,6 +510,7 @@ fields:
   - "no label": registered_new_trademarks
     datatype: yesnoradio
   - "Add details": registered_new_trademarks_details
+    input type: area
     show if: registered_new_trademarks
 ---
 id: goods services sold
@@ -536,6 +540,7 @@ fields:
   - "no label": current_trademark_infringements
     datatype: yesnoradio
   - "Add details": current_trademark_infringements_details
+    input type: area
     show if: current_trademark_infringements
 ---
 id: item 18
@@ -545,6 +550,7 @@ fields:
   - "no label": public_figures
     datatype: yesnoradio
   - "Add details": public_figures_details
+    input type: area
     show if: public_figures
 ---
 id: item 6
@@ -554,6 +560,7 @@ fields:
   - "no label": required_fee_changes
     datatype: yesnoradio
   - "Add details": required_fee_changes_details
+    input type: area
     show if: required_fee_changes
 ---
 id: former franchisee category
@@ -575,6 +582,7 @@ fields:
   - "no label": intended_fee_changes
     datatype: yesnoradio
   - "Add details": intended_fee_changes_details
+    input type: area
     show if: intended_fee_changes
 ---
 id: Upload documents
@@ -656,6 +664,7 @@ fields:
   - "no label": wants_new_trademarks
     datatype: yesnoradio
   - "Add details": wants_new_trademarks_details
+    input type: area
     show if: wants_new_trademarks
 ---
 id: How territory determined changes
@@ -665,6 +674,7 @@ fields:
   - "no label": territory_determined_changes
     datatype: yesnoradio
   - "Add details": territory_determined_changes_details
+    input type: area
     show if: territory_determined_changes
 ---
 id: Public agency injunctions
@@ -674,6 +684,7 @@ fields:
   - "no label": public_agency_injunctions
     datatype: yesnoradio
   - "Add details": public_agency_injunctions_details
+    input type: area
     show if: public_agency_injunctions
 ---
 id: item 1
@@ -685,6 +696,7 @@ fields:
   - "no label": has_item_1_changes
     datatype: yesnoradio
   - "Add details": item_1_changes_details
+    input type: area
     show if: has_item_1_changes
 ---
 id: initial fee
@@ -696,6 +708,7 @@ fields:
   - "no label": not_uniform
     datatype: yesnoradio
   - "Add details": fee_and_range
+    input type: area
     show if: not_uniform
 ---
 id: financials upload
@@ -729,6 +742,7 @@ fields:
   - "no label": protected_territory_changes
     datatype: yesnoradio
   - "Add details": protected_territory_changes_details
+    input type: area
     show if: protected_territory_changes
 ---
 id: item 7
@@ -740,6 +754,7 @@ fields:
   - "no label": has_item_7_changes
     datatype: yesnoradio
   - "Add details": item_7_changes_details
+    input type: area
     show if: has_item_7_changes
 ---
 id: Rights reserved
@@ -749,6 +764,7 @@ fields:
   - "no label": rights_reserved_changes
     datatype: yesnoradio
   - "Add details": rights_reserved_changes_details
+    input type: area
     show if: rights_reserved_changes
 ---
 id: material civil actions
@@ -758,6 +774,7 @@ fields:
   - "no label": material_civil_actions
     datatype: yesnoradio
   - "Add details": material_civil_actions_details
+    input type: area
     show if: material_civil_actions
 ---
 id: unit or system changes
@@ -767,6 +784,7 @@ fields:
   - "no label": unit_system_changes
     datatype: yesnoradio
   - "Add details": unit_system_changes_details
+    input type: area
     show if: unit_system_changes
 ---
 id: item 14
@@ -776,6 +794,7 @@ fields:
   - "no label": added_patents_copyrights
     datatype: yesnoradio
   - "Add details": added_patents_copyrights_details
+    input type: area
     show if: added_patents_copyrights
 ---
 id: item 4
@@ -785,6 +804,7 @@ fields:
   - "no label": bankruptcy_filing
     datatype: yesnoradio
   - "Add details": bankruptcy_filing_details
+    input type: area
     show if: bankruptcy_filing
 ---
 id: preview fdd_annual_renewal
