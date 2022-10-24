@@ -328,20 +328,19 @@ fields:
     datatype: yesnoradio
 ---
 id: employment
-generic object: DAObject
 question: |
-  What is ${x}'s employment history?
+  What is ${franchise_seller[i].name}'s employment history?
 subquestion: |
   List all employment during the past five years.
 fields: 
-  - Employer name: x.employer
-  - Position held: x.position
-  - Start date: x.start
+  - Employer name: franchise_seller[i].employment[j].employer
+  - Position held: franchise_seller[i].employment[j].position
+  - Start date: franchise_seller[i].employment[j].start
     datatype: date
-  - End date: x.end
+  - End date: franchise_seller[i].employment[j].end
     datatype: date
-    hide if: x.present_employer
-  - Present employer: x.present_employer
+    hide if: franchise_seller[i].employment[j].present_employer
+  - Present employer: franchise_seller[i].employment[j].present_employer
     datatype: yesno
 ---
 id: action pending
@@ -635,22 +634,22 @@ fields:
     min: 0
     show if: active_advertising_fund
   - "% spent on Production": production
-    datatype: number
+    datatype: integer
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Media Placement": media_placement
-    datatype: number
+    datatype: integer
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Administrative": administrative
-    datatype: number
+    datatype: integer
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Other": other
-    datatype: number
+    datatype: integer
     min: 0
     max: 100
     show if: active_advertising_fund
