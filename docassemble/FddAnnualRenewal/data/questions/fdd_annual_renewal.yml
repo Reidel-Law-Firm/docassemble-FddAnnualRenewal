@@ -1,6 +1,7 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.ALToolbox:phone-number-validation.yml  
 ---
 metadata:
   title: |
@@ -160,6 +161,8 @@ code: |
 
   has_other_changes
   
+  review_fdd_annual_renewal
+  
   set_progress(99)
 
   interview_order_fdd_annual_renewal = True
@@ -193,7 +196,7 @@ subquestion: |
 id: any current franchisees
 generic object: ALPeopleList
 question: |
-  Do you have any current franchisees to add?
+  Are there any current franchisees to add?
 fields:
   - no label: current_franchisee.there_are_any
     datatype: yesnoradio
@@ -201,7 +204,7 @@ fields:
 id: any former franchisee
 generic object: ALPeopleList
 question: |
-  Do you have any former franchisees to add?
+  Are there any former franchisees to add?
 fields:
   - no label: former_franchisee.there_are_any
     datatype: yesnoradio
@@ -209,7 +212,7 @@ fields:
 id: any signed franchisee
 generic object: ALPeopleList
 question: |
-  Do you have any signed franchisees to add?
+  Are there any signed franchisees to add?
 fields:
   - no label: signed_franchisee.there_are_any
     datatype: yesnoradio
@@ -217,7 +220,7 @@ fields:
 id: any franchise seller
 generic object: ALPeopleList
 question: |
-  Do you have any franchise sellers to add?
+  Are there any franchise sellers to add?
 fields:
   - no label: franchise_seller.there_are_any
     datatype: yesnoradio
@@ -447,6 +450,7 @@ fields:
   - code: |
       current_franchisee[i].address_fields(show_country=True)
   - Phone number: current_franchisee[i].phone_number
+    datatype: al_international_phone
 ---
 id: signed franchisee basic info
 generic object: ALIndividual
@@ -461,6 +465,7 @@ fields:
   - code: |
       signed_franchisee[i].address_fields(show_country=True)
   - Phone number: signed_franchisee[i].phone_number
+    datatype: al_international_phone
 ---
 id: former franchisee basic info
 generic object: ALIndividual
@@ -475,6 +480,7 @@ fields:
   - code: |
       former_franchisee[i].address_fields(show_country=True)
   - Phone number: former_franchisee[i].phone_number
+    datatype: al_international_phone
 ---
 id: franchise seller basic info
 generic object: ALIndividual
@@ -489,10 +495,11 @@ fields:
   - code: |
       franchise_seller[i].address_fields(show_country=True)
   - Phone number: franchise_seller[i].phone_number
+    datatype: al_international_phone
 ---
 id: other changes
 question: |
-  Do you have any other changes?
+  Are there any other changes?
 subquestion: |
   If you are considering any other changes to your franchise agreement or other franchise documents, please note them here. We will reach out to discuss these in more details as necessary.       
   Item 17 in your FDD is a great cheatsheet to review your terms and identify any revisions needed.
@@ -830,222 +837,38 @@ event: review_fdd_annual_renewal
 question: |
   Review your answers
 review:
-  - Edit: changes
+  - Edit: current_franchisee
     button: |
-      **Changes**:
-      ${ changes }
-  - Edit: registered_new_trademarks
-    button: |
-      **Registered new trademarks**:
-      ${ registered_new_trademarks }
-  - Edit: goods_services_sold_details
-    button: |
-      **Goods services sold details**:
-      ${ goods_services_sold_details }
+      **Current Franchisee**
+
+      % for item in current_franchisee:
+        * ${ item }
+      % endfor
   - Edit: signed_franchisee.revisit
     button: |
-      **Signed franchisee**
+      **Signed Franchisee**
 
       % for item in signed_franchisee:
         * ${ item }
       % endfor
   - Edit: former_franchisee.revisit
     button: |
-      **Former franchisee**
+      **Former Franchisee**
 
       % for item in former_franchisee:
         * ${ item }
       % endfor
-  - Edit: current_franchisees
-    button: |
-      **Current franchisees**:
-      ${ current_franchisees }
-  - Edit: current_trademark_infringements_details
-    button: |
-      **Current trademark infringements details**:
-      ${ current_trademark_infringements_details }
-  - Edit: public_figures
-    button: |
-      **Public figures**:
-      ${ public_figures }
-  - Edit: has_other_changes
-    button: |
-      **Has other changes**:
-      ${ has_other_changes }
-  - Edit: goods_services_sold
-    button: |
-      **Goods services sold**:
-      ${ goods_services_sold }
-  - Edit: required_fee_changes_details
-    button: |
-      **Required fee changes details**:
-      ${ required_fee_changes_details }
-  - Edit: intended_fee_changes_details
-    button: |
-      **Intended fee changes details**:
-      ${ intended_fee_changes_details }
-  - Edit: public_figures_details
-    button: |
-      **Public figures details**:
-      ${ public_figures_details }
-  - Edit: current_franchisee.revisit
-    button: |
-      **Current franchisee**
-
-      % for item in current_franchisee:
-        * ${ item }
-      % endfor
   - Edit: franchise_seller.revisit
     button: |
-      **Franchise seller**
+      **Franchise Seller**
 
       % for item in franchise_seller:
         * ${ item }
       % endfor
-  - Edit: upload
-    button: |
-      **Upload**:
-      ${ upload }
-  - Edit: active_advertising_fund
-    button: |
-      **Active advertising fund**:
-      ${ active_advertising_fund }
-  - Edit: current_trademark_infringements
-    button: |
-      **Current trademark infringements**:
-      ${ current_trademark_infringements }
-  - Edit: wants_new_trademarks_details
-    button: |
-      **Wants new trademarks details**:
-      ${ wants_new_trademarks_details }
-  - Edit: public_agency_injunctions
-    button: |
-      **Public agency injunctions**:
-      ${ public_agency_injunctions }
-  - Edit: registered_new_trademarks_details
-    button: |
-      **Registered new trademarks details**:
-      ${ registered_new_trademarks_details }
-  - Edit: fee_and_range
-    button: |
-      **Fee and range**:
-      ${ fee_and_range }
-  - Edit: has_item_1_changes
-    button: |
-      **Has item 1 changes**:
-      ${ has_item_1_changes }
-  - Edit: has_financials
-    button: |
-      **Has financials**:
-      ${ has_financials }
-  - Edit: preferred_issuance_date
-    button: |
-      **Date of Preferred issuance**:
-      ${ preferred_issuance_date }
-  - Edit: protected_territory_changes_details
-    button: |
-      **Protected territory changes details**:
-      ${ protected_territory_changes_details }
-  - Edit: preferred
-    button: |
-      **Preferred**:
-      ${ preferred }
-  - Edit: item_7_changes_details
-    button: |
-      **Item 7 changes details**:
-      ${ item_7_changes_details }
-  - Edit: signed_franchisees
-    button: |
-      **Signed franchisees**:
-      ${ signed_franchisees }
-  - Edit: material_civil_actions
-    button: |
-      **Material civil actions**:
-      ${ material_civil_actions }
-  - Edit: former_franchisees
-    button: |
-      **Former franchisees**:
-      ${ former_franchisees }
-  - Edit: material_civil_actions_details
-    button: |
-      **Material civil actions details**:
-      ${ material_civil_actions_details }
-  - Edit: public_agency_injunctions_details
-    button: |
-      **Public agency injunctions details**:
-      ${ public_agency_injunctions_details }
-  - Edit: not_uniform
-    button: |
-      **Not uniform**:
-      ${ not_uniform }
-  - Edit: unit_system_changes
-    button: |
-      **Unit system changes**:
-      ${ unit_system_changes }
-  - Edit: rights_reserved_changes_details
-    button: |
-      **Rights reserved changes details**:
-      ${ rights_reserved_changes_details }
-  - Edit: item_1_changes_details
-    button: |
-      **Item 1 changes details**:
-      ${ item_1_changes_details }
-  - Edit: bankruptcy_filing
-    button: |
-      **Bankruptcy filing**:
-      ${ bankruptcy_filing }
-  - Edit: expense_total_amount
-    button: |
-      **Expense total amount**:
-      ${ currency(expense_total_amount) }
-  - Edit: required_fee_changes
-    button: |
-      **Required fee changes**:
-      ${ required_fee_changes }
-  - Edit: added_patents_copyrights_details
-    button: |
-      **Added patents copyrights details**:
-      ${ added_patents_copyrights_details }
-  - Edit: intended_fee_changes
-    button: |
-      **Intended fee changes**:
-      ${ intended_fee_changes }
-  - Edit: has_item_7_changes
-    button: |
-      **Has item 7 changes**:
-      ${ has_item_7_changes }
-  - Edit: protected_territory_changes
-    button: |
-      **Protected territory changes**:
-      ${ protected_territory_changes }
-  - Edit: rights_reserved_changes
-    button: |
-      **Rights reserved changes**:
-      ${ rights_reserved_changes }
-  - Edit: wants_new_trademarks
-    button: |
-      **Wants new trademarks**:
-      ${ wants_new_trademarks }
-  - Edit: added_patents_copyrights
-    button: |
-      **Added patents copyrights**:
-      ${ added_patents_copyrights }
   - Edit: states
     button: |
-      **States**:
+      **States to register or renew**:
       ${ states }
-  - Edit: unit_system_changes_details
-    button: |
-      **Unit system changes details**:
-      ${ unit_system_changes_details }
-  - Edit: territory_determined_changes_details
-    button: |
-      **Territory determined changes details**:
-      ${ territory_determined_changes_details }
-  - Edit: territory_determined_changes
-    button: |
-      **Territory determined changes**:
-      ${ territory_determined_changes }
 ---
 continue button field: signed_franchisee.revisit
 question: |
@@ -1058,18 +881,17 @@ subquestion: |
 table: signed_franchisee.table
 rows: signed_franchisee
 columns:
-  - Phone number: |
-      row_item.phone_number if defined("row_item.phone_number") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
   - Name: |
       row_item.name.full() if defined("row_item.name.first") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Phone number: |
+      row_item.phone_number if defined("row_item.phone_number") else ""
 edit:
   - phone_number
   - address.address
   - name.first
 confirm: True
-
 ---
 continue button field: former_franchisee.revisit
 question: |
@@ -1084,23 +906,19 @@ rows: former_franchisee
 columns:
   - Name: |
       row_item.name.full() if defined("row_item.name.first") else ""
-  - Category: |
-      row_item.category if defined("row_item.category") else ""
   - Address: |
       row_item.address.block() if defined("row_item.address.address") else ""
   - Phone number: |
       row_item.phone_number if defined("row_item.phone_number") else ""
 edit:
   - name.first
-  - category
   - address.address
   - phone_number
 confirm: True
-
 ---
 continue button field: current_franchisee.revisit
 question: |
-  Edit current_franchisee
+  Edit Current Franchisee
 subquestion: |
   ${ current_franchisee.table }
 
@@ -1109,18 +927,17 @@ subquestion: |
 table: current_franchisee.table
 rows: current_franchisee
 columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
   - Address: |
       row_item.address.block() if defined("row_item.address.address") else ""
   - Phone number: |
       row_item.phone_number if defined("row_item.phone_number") else ""
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
 edit:
+  - name.first
   - address.address
   - phone_number
-  - name.first
 confirm: True
-
 ---
 continue button field: franchise_seller.revisit
 question: |
