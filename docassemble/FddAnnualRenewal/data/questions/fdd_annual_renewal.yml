@@ -161,7 +161,7 @@ code: |
 
   has_other_changes
   
-  review_fdd_annual_renewal
+  #review_fdd_annual_renewal
   
   set_progress(99)
 
@@ -191,7 +191,7 @@ continue button field: fdd_annual_renewal_intro
 question: |
   FDD Annual Renewal Questionnaire
 subquestion: |
-  TODO
+  **FDD** Annual Renewal Questionnaire Information TODO
 ---
 id: any current franchisees
 generic object: ALPeopleList
@@ -507,6 +507,7 @@ fields:
   - "no label": has_other_changes
     datatype: yesnoradio
   - "What are the changes?": changes
+    input type: area
     show if: has_other_changes
 ---
 id: registered any new trademarks 
