@@ -95,6 +95,7 @@ code: |
   user_role = 'na'
   
   users.gather()
+  brand
   
   preferred
   
@@ -104,6 +105,8 @@ code: |
     former_franchisee.gather(complete_attribute = "gather_complete_1")
     
   set_progress(11)
+  
+  states
   
   franchise_seller.gather(complete_attribute = "gather_complete_2")
   
@@ -131,7 +134,7 @@ code: |
   
   if goods_services_sold:
     sale[0].what
-    revenue_total = sum(s.revenue for s in sale)
+    revenue_total
   unit_system_changes
   
   active_advertising_fund
@@ -153,8 +156,6 @@ code: |
   set_progress(88)
   
   public_figures
-  
-  states
   
   has_financials
 
@@ -190,6 +191,12 @@ question: |
 subquestion: |
   TODO
 ---
+id: brand name
+question: |
+  What is your brand name?
+fields:
+  - no label: brand
+---
 id: any current franchisees
 generic object: ALPeopleList
 question: |
@@ -213,6 +220,12 @@ question: |
 fields:
   - no label: signed_franchisee.there_are_any
     datatype: yesnoradio
+---
+id: revenue_total
+question: |
+  What is the total revenue?
+fields:
+  - no label: revenue_total
 ---
 id: any franchise seller
 generic object: ALPeopleList
