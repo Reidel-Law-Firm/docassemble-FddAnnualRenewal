@@ -647,27 +647,31 @@ fields:
     min: 0
     show if: active_advertising_fund
   - "% spent on Production": production
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Media Placement": media_placement
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Administrative": administrative
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Other": other
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "Describe Other": other_description
+    required: false
     show if: active_advertising_fund
+validation code: |
+  if production + media_placement + administrative + other < 100:
+    validation_error("The percentage you spend on each must add up to 100.")
 ---
 id: Wants new trademarks
 question: |
