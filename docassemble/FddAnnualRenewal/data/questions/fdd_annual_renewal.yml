@@ -161,7 +161,7 @@ code: |
 
   has_other_changes
   
-  #review_fdd_annual_renewal
+  review_fdd_annual_renewal
   
   set_progress(99)
 
@@ -610,7 +610,7 @@ fields:
 ---
 id: states
 question: |
-  Which state(s) will want to register in or renew this year? 
+  Which state(s) will you want to register in or renew this year? 
 fields:
   - no label: states
     datatype: checkboxes
@@ -869,7 +869,7 @@ review:
   - Edit: states
     button: |
       **States to register or renew**:
-      ${ states }
+      ${ states.true_values() }
 ---
 continue button field: signed_franchisee.revisit
 question: |
