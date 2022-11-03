@@ -52,13 +52,13 @@ code: |
 ---
 objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
-  - former_franchisee: ALPeopleList
-  - signed_franchisee: ALPeopleList
-  - current_franchisee: ALPeopleList
+  - former_franchisee: ALPeopleList.using(complete_attribute = "gather_complete_1")
+  - signed_franchisee: ALPeopleList.using(complete_attribute = "gather_complete")
+  - current_franchisee: ALPeopleList.using(complete_attribute = "gather_complete")
   - sale: DAList.using(object_type=DAObject)
 ---
 objects: 
-  - franchise_seller: ALPeopleList
+  - franchise_seller: ALPeopleList.using(complete_attribute = "gather_complete_2")
 ---
 objects:
   - franchise_seller[i].employment: DAList.using(object_type=DAObject)
@@ -100,13 +100,13 @@ code: |
   preferred
   
   if not upload:
-    current_franchisee.gather(complete_attribute = "gather_complete")
-    signed_franchisee.gather(complete_attribute = "gather_complete")
-    former_franchisee.gather(complete_attribute = "gather_complete_1")
+    current_franchisee.gather()
+    signed_franchisee.gather()
+    former_franchisee.gather()
     
   set_progress(11)
   
-  franchise_seller.gather(complete_attribute = "gather_complete_2")
+  franchise_seller.gather()
   
   has_item_1_changes
   
@@ -838,7 +838,7 @@ event: review_fdd_annual_renewal
 question: |
   Review your answers
 review:
-  - Edit: current_franchisee
+  - Edit: current_franchisee.revisit
     button: |
       **Current Franchisee**
 
@@ -873,7 +873,7 @@ review:
 ---
 continue button field: signed_franchisee.revisit
 question: |
-  Edit signed_franchisee
+  Edit Signed Franchisee
 subquestion: |
   ${ signed_franchisee.table }
 
@@ -889,14 +889,14 @@ columns:
   - Phone number: |
       row_item.phone_number if defined("row_item.phone_number") else ""
 edit:
-  - phone_number
-  - address.address
   - name.first
+  - address.address
+  - phone_number
 confirm: True
 ---
 continue button field: former_franchisee.revisit
 question: |
-  Edit former_franchisee
+  Edit Former Franchisee
 subquestion: |
   ${ former_franchisee.table }
 
@@ -942,7 +942,7 @@ confirm: True
 ---
 continue button field: franchise_seller.revisit
 question: |
-  Edit franchise_seller
+  Edit Franchise Seller
 subquestion: |
   ${ franchise_seller.table }
 
@@ -951,15 +951,14 @@ subquestion: |
 table: franchise_seller.table
 rows: franchise_seller
 columns:
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
   - Name: |
       row_item.name.full() if defined("row_item.name.first") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
 edit:
-  - address.address
   - name.first
+  - address.address
 confirm: True
-
 ---
 id: download fdd_annual_renewal
 event: fdd_annual_renewal_download
