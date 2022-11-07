@@ -108,6 +108,9 @@ code: |
   set_progress(11)
   
   franchise_seller.gather()
+
+  states
+  
   
   has_item_1_changes
   
@@ -133,7 +136,7 @@ code: |
   
   if goods_services_sold:
     sale[0].what
-    revenue_total = sum(s.revenue for s in sale)
+    revenue_total
   unit_system_changes
   
   active_advertising_fund
@@ -155,8 +158,6 @@ code: |
   set_progress(88)
   
   public_figures
-  
-  states
   
   has_financials
 
@@ -230,6 +231,12 @@ template: former_franchisee[i].person_type_label
 content: |
   Is this a person or an organization?
 ---
+id: brand name
+question: |
+  What is your brand name?
+fields:
+  - no label: brand
+---
 id: any current franchisees
 generic object: ALPeopleList
 question: |
@@ -253,6 +260,12 @@ question: |
 fields:
   - no label: signed_franchisee.there_are_any
     datatype: yesnoradio
+---
+id: revenue_total
+question: |
+  What is the total revenue?
+fields:
+  - no label: revenue_total
 ---
 id: any franchise seller
 generic object: ALPeopleList
@@ -679,27 +692,31 @@ fields:
     min: 0
     show if: active_advertising_fund
   - "% spent on Production": production
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Media Placement": media_placement
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Administrative": administrative
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "% spent on Other": other
-    datatype: integer
+    datatype: number
     min: 0
     max: 100
     show if: active_advertising_fund
   - "Describe Other": other_description
+    required: false
     show if: active_advertising_fund
+validation code: |
+  if production + media_placement + administrative + other < 100:
+    validation_error("The percentage you spend on each must add up to 100.")
 ---
 id: Wants new trademarks
 question: |
@@ -913,7 +930,6 @@ question: |
   Edit Signed Franchisee
 subquestion: |
   ${ signed_franchisee.table }
-
   ${ signed_franchisee.add_action() }
 ---
 table: signed_franchisee.table
@@ -936,7 +952,6 @@ question: |
   Edit Former Franchisee
 subquestion: |
   ${ former_franchisee.table }
-
   ${ former_franchisee.add_action() }
 ---
 table: former_franchisee.table
@@ -959,7 +974,6 @@ question: |
   Edit Current Franchisee
 subquestion: |
   ${ current_franchisee.table }
-
   ${ current_franchisee.add_action() }
 ---
 table: current_franchisee.table
@@ -982,7 +996,6 @@ question: |
   Edit Franchise Seller
 subquestion: |
   ${ franchise_seller.table }
-
   ${ franchise_seller.add_action() }
 ---
 table: franchise_seller.table
@@ -1005,15 +1018,12 @@ subquestion: |
   Thank you ${users}. Your form is ready to download and deliver.
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
   ${ action_button_html(url_action('review_fdd_annual_renewal'), label='Edit answers', color='info') }
   
   
   ${ al_user_bundle.download_list_html() }
   
-
   ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
-
 progress: 100
 ---
 objects:
