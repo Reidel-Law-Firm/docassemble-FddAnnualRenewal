@@ -715,7 +715,7 @@ fields:
     required: false
     show if: active_advertising_fund
 validation code: |
-  if production + media_placement + administrative + other < 100:
+  if active_advertising_fund and production + media_placement + administrative + other < 100:
     validation_error("The percentage you spend on each must add up to 100.")
 ---
 id: Wants new trademarks
