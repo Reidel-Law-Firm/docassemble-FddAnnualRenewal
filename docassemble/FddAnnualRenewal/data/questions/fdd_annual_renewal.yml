@@ -1,6 +1,7 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.ALToolbox:phone-number-validation.yml  
 ---
 metadata:
   title: |
@@ -51,13 +52,13 @@ code: |
 ---
 objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
-  - former_franchisee: ALPeopleList
-  - signed_franchisee: ALPeopleList
-  - current_franchisee: ALPeopleList
+  - former_franchisee: ALPeopleList.using(complete_attribute = "gather_complete_1")
+  - signed_franchisee: ALPeopleList.using(complete_attribute = "gather_complete")
+  - current_franchisee: ALPeopleList.using(complete_attribute = "gather_complete")
   - sale: DAList.using(object_type=DAObject)
 ---
 objects: 
-  - franchise_seller: ALPeopleList
+  - franchise_seller: ALPeopleList.using(complete_attribute = "gather_complete_2")
 ---
 objects:
   - franchise_seller[i].employment: DAList.using(object_type=DAObject)
@@ -100,15 +101,16 @@ code: |
   preferred
   
   if not upload:
-    current_franchisee.gather(complete_attribute = "gather_complete")
-    signed_franchisee.gather(complete_attribute = "gather_complete")
-    former_franchisee.gather(complete_attribute = "gather_complete_1")
+    current_franchisee.gather()
+    signed_franchisee.gather()
+    former_franchisee.gather()
     
   set_progress(11)
   
+  franchise_seller.gather()
+
   states
   
-  franchise_seller.gather(complete_attribute = "gather_complete_2")
   
   has_item_1_changes
   
@@ -165,14 +167,24 @@ code: |
 
   interview_order_fdd_annual_renewal = True
 ---
+language: en
+sections:
+  - section_getting_started: Getting started
+  - review_fdd_annual_renewal: Your FDD
+  - download_fdd_annual_renewal: Download
+---
 ###################### Main order ######################
 comment: |
   This block includes the logic for standalone interviews.
   Delete mandatory: True to include in another interview
 mandatory: True
 code: |
+  nav.set_section('section_getting_started')
   fdd_annual_renewal_intro
+  
+  nav.set_section('review_fdd_annual_renewal')
   interview_order_fdd_annual_renewal
+
   signature_date
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
@@ -182,6 +194,8 @@ code: |
           "reached_interview_end": True,
       },
   )
+  
+  nav.set_section('download_fdd_annual_renewal')
   fdd_annual_renewal_download
 ---
 id: Fdd_annual_renewal
@@ -189,7 +203,33 @@ continue button field: fdd_annual_renewal_intro
 question: |
   FDD Annual Renewal Questionnaire
 subquestion: |
-  TODO
+  **FDD** Annual Renewal Questionnaire Information TODO
+--- 
+id: brand name
+question: |
+  What is your brand name?
+fields:
+  - no label: brand
+---
+generic object: ALIndividual
+template: franchise_seller[i].person_type_label
+content: |
+  Is this a person or an organization?
+---
+generic object: ALIndividual
+template: current_franchisee[i].person_type_label
+content: |
+  Is this a person or an organization?
+---
+generic object: ALIndividual
+template: signed_franchisee[i].person_type_label
+content: |
+  Is this a person or an organization?
+---
+generic object: ALIndividual
+template: former_franchisee[i].person_type_label
+content: |
+  Is this a person or an organization?
 ---
 id: brand name
 question: |
@@ -200,7 +240,7 @@ fields:
 id: any current franchisees
 generic object: ALPeopleList
 question: |
-  Do you have any current franchisees to add?
+  Are there any current franchisees to add?
 fields:
   - no label: current_franchisee.there_are_any
     datatype: yesnoradio
@@ -208,7 +248,7 @@ fields:
 id: any former franchisee
 generic object: ALPeopleList
 question: |
-  Do you have any former franchisees to add?
+  Are there any former franchisees to add?
 fields:
   - no label: former_franchisee.there_are_any
     datatype: yesnoradio
@@ -216,7 +256,7 @@ fields:
 id: any signed franchisee
 generic object: ALPeopleList
 question: |
-  Do you have any signed franchisees to add?
+  Are there any signed franchisees to add?
 fields:
   - no label: signed_franchisee.there_are_any
     datatype: yesnoradio
@@ -230,7 +270,7 @@ fields:
 id: any franchise seller
 generic object: ALPeopleList
 question: |
-  Do you have any franchise sellers to add?
+  Are there any franchise sellers to add?
 fields:
   - no label: franchise_seller.there_are_any
     datatype: yesnoradio
@@ -460,6 +500,7 @@ fields:
   - code: |
       current_franchisee[i].address_fields(show_country=True)
   - Phone number: current_franchisee[i].phone_number
+    datatype: al_international_phone
 ---
 id: signed franchisee basic info
 generic object: ALIndividual
@@ -474,6 +515,7 @@ fields:
   - code: |
       signed_franchisee[i].address_fields(show_country=True)
   - Phone number: signed_franchisee[i].phone_number
+    datatype: al_international_phone
 ---
 id: former franchisee basic info
 generic object: ALIndividual
@@ -488,6 +530,7 @@ fields:
   - code: |
       former_franchisee[i].address_fields(show_country=True)
   - Phone number: former_franchisee[i].phone_number
+    datatype: al_international_phone
 ---
 id: franchise seller basic info
 generic object: ALIndividual
@@ -502,10 +545,11 @@ fields:
   - code: |
       franchise_seller[i].address_fields(show_country=True)
   - Phone number: franchise_seller[i].phone_number
+    datatype: al_international_phone
 ---
 id: other changes
 question: |
-  Do you have any other changes?
+  Are there any other changes?
 subquestion: |
   If you are considering any other changes to your franchise agreement or other franchise documents, please note them here. We will reach out to discuss these in more details as necessary.       
   Item 17 in your FDD is a great cheatsheet to review your terms and identify any revisions needed.
@@ -513,6 +557,7 @@ fields:
   - "no label": has_other_changes
     datatype: yesnoradio
   - "What are the changes?": changes
+    input type: area
     show if: has_other_changes
 ---
 id: registered any new trademarks 
@@ -615,7 +660,7 @@ fields:
 ---
 id: states
 question: |
-  Which state(s) will want to register in or renew this year? 
+  Which state(s) will you want to register in or renew this year? 
 fields:
   - no label: states
     datatype: checkboxes
@@ -850,24 +895,28 @@ review:
   - Edit: current_franchisee.revisit
     button: |
       **Current Franchisee**
+
       % for item in current_franchisee:
         * ${ item }
       % endfor
   - Edit: signed_franchisee.revisit
     button: |
       **Signed Franchisee**
+
       % for item in signed_franchisee:
         * ${ item }
       % endfor
   - Edit: former_franchisee.revisit
     button: |
       **Former Franchisee**
+
       % for item in former_franchisee:
         * ${ item }
       % endfor
   - Edit: franchise_seller.revisit
     button: |
       **Franchise Seller**
+
       % for item in franchise_seller:
         * ${ item }
       % endfor
