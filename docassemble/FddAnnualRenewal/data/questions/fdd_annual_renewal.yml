@@ -84,9 +84,6 @@ objects:
 objects:
   - injunctions: DAList.using(object_type=DAObject)
 ---
-sections:
-  - review_fdd_annual_renewal: Review your answers
----
 #################### Interview order #####################
 id: interview_order_fdd_annual_renewal
 code: |
