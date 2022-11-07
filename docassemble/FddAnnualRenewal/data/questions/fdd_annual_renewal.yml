@@ -96,6 +96,7 @@ code: |
   user_role = 'na'
   
   users.gather()
+  brand
   
   preferred
   
@@ -161,11 +162,15 @@ code: |
 
   has_other_changes
   
-  review_fdd_annual_renewal
-  
   set_progress(99)
 
   interview_order_fdd_annual_renewal = True
+---
+language: en
+sections:
+  - section_getting_started: Getting started
+  - review_fdd_annual_renewal: Your FDD
+  - download_fdd_annual_renewal: Download
 ---
 ###################### Main order ######################
 comment: |
@@ -173,8 +178,12 @@ comment: |
   Delete mandatory: True to include in another interview
 mandatory: True
 code: |
+  nav.set_section('section_getting_started')
   fdd_annual_renewal_intro
+  
+  nav.set_section('review_fdd_annual_renewal')
   interview_order_fdd_annual_renewal
+
   signature_date
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
@@ -184,6 +193,8 @@ code: |
           "reached_interview_end": True,
       },
   )
+  
+  nav.set_section('download_fdd_annual_renewal')
   fdd_annual_renewal_download
 ---
 id: Fdd_annual_renewal
@@ -192,6 +203,32 @@ question: |
   FDD Annual Renewal Questionnaire
 subquestion: |
   **FDD** Annual Renewal Questionnaire Information TODO
+--- 
+id: brand name
+question: |
+  What is your brand name?
+fields:
+  - no label: brand
+---
+generic object: ALIndividual
+template: franchise_seller[i].person_type_label
+content: |
+  Is this a person or an organization?
+---
+generic object: ALIndividual
+template: current_franchisee[i].person_type_label
+content: |
+  Is this a person or an organization?
+---
+generic object: ALIndividual
+template: signed_franchisee[i].person_type_label
+content: |
+  Is this a person or an organization?
+---
+generic object: ALIndividual
+template: former_franchisee[i].person_type_label
+content: |
+  Is this a person or an organization?
 ---
 id: any current franchisees
 generic object: ALPeopleList
