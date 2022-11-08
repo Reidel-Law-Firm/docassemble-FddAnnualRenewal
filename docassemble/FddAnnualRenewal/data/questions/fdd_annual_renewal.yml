@@ -97,35 +97,34 @@ code: |
   
   preferred
   
+  set_progress(10)
+  
   if not upload:
     current_franchisee.gather()
     signed_franchisee.gather()
     former_franchisee.gather()
-    
-  set_progress(11)
+  
+  set_progress(22)
   
   franchise_seller.gather()
 
   states
   
-  
   has_item_1_changes
   
-  set_progress(22)
+  set_progress(33)
   
   material_civil_actions
   public_agency_injunctions
   
   bankruptcy_filing
   
-  set_progress(33)
+  set_progress(44)
   
   not_uniform
   
   required_fee_changes
   intended_fee_changes
-  
-  set_progress(44)
   
   has_item_7_changes
   
