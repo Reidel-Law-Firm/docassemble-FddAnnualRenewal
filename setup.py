@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.FddAnnualRenewal',
-      version='2.3',
+      version='2.4',
       description=('Fdd annual renewal'),
       long_description='# docassemble.FddAnnualRenewal\r\n\r\nFdd annual renewal\r\n\r\n## Author\r\n\r\nauthor@example.com\r\n\r\n',
       long_description_content_type='text/markdown',
@@ -54,7 +54,7 @@ setup(name='docassemble.FddAnnualRenewal',
       url='https://courtformsonline.org',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.AssemblyLine>=2.17.0'],
+      install_requires=['docassemble.AssemblyLine>=2.19.0'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/FddAnnualRenewal/', package='docassemble.FddAnnualRenewal'),
      )
