@@ -45,7 +45,7 @@ code: |
   github_repo_name =  'docassemble-FddAnnualRenewal'
 ---
 code: |
-  interview_short_title = "Get a Fdd annual renewal"
+  interview_short_title = "Automated FDD Renewal Checklist"
 ---
 code: |
   al_form_type = "other" 
@@ -199,7 +199,14 @@ continue button field: fdd_annual_renewal_intro
 question: |
   FDD Annual Renewal Questionnaire
 subquestion: |
-  **FDD** Annual Renewal Questionnaire Information TODO
+  Franchise Disclosure Document Annual Renewal Automated Checklist
+  This automated questionnaire will walk you through the most frequent and necessary items for your FDD's annual renewal. You will be able to close this interview and return at a later time to complete your interview from the same browser or feel free to create a user to save your checklist answers to complete at any time from any device. 
+  
+  It will be easiest to complete this checklist with your current FDD version beside you. As you work through the answers be sure to add as much detail as necessary for the renewal updates. You can see your progress through the questions at the top with the progress bar.
+  
+  Once you have completed the checklist questions, a simple formatted summary will be generated that you can download to send to your franchise attorney or your franchise compliance team.
+  
+  Feel free to reach out to Reidel Law Firm for any additional questions or guidance on your FDD renewal at our website: ReidelLawFirm.com
 --- 
 id: brand name
 question: |
@@ -640,9 +647,9 @@ fields:
 ---
 id: Upload documents
 question: |
-  Upload documents
+  Upload List of Franchisees
 subquestion: |
-  Do you have documents to upload listing the names, addresses, and phone numbers for your current franchisees, any that signed a franchise agreement but have not yet opened up for business, and any former franchises? 
+  Do you have a list to upload with the names, addresses, and phone numbers for your current franchisees, or any franchisees that signed a franchise agreement but have not yet opened up for business, and any former franchises? It is usually easiest to keep these in a spreadsheet which you can upload here.
   
   If you do not have these documents, you will be able to enter this information on the following screens.
 fields:
@@ -1011,7 +1018,7 @@ event: fdd_annual_renewal_download
 question: |
   All done
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
+  Thank you ${users}. Your form is ready to download and send to your franchise attorney or compliance team. Enjoy!
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
   ${ action_button_html(url_action('review_fdd_annual_renewal'), label='Edit answers', color='info') }

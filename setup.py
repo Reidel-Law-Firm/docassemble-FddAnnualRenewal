@@ -44,11 +44,11 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.FddAnnualRenewal',
-      version='2.2',
+      version='2.3',
       description=('Fdd annual renewal'),
       long_description='# docassemble.FddAnnualRenewal\r\n\r\nFdd annual renewal\r\n\r\n## Author\r\n\r\nauthor@example.com\r\n\r\n',
       long_description_content_type='text/markdown',
-      author='',
+      author='Schuyler "Rocky" Reidel',
       author_email='mbonardi@su.suffolk.edu',
       license='The MIT License',
       url='https://courtformsonline.org',
