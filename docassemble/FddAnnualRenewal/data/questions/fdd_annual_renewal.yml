@@ -92,7 +92,6 @@ code: |
   nav.set_section('review_fdd_annual_renewal')
   user_role = 'na'
   
-  #users.gather()
   brand
   
   preferred
@@ -210,11 +209,14 @@ subquestion: |
   
   Feel free to reach out to [Reidel Law Firm](https://www.reidellawfirm.com) for any additional questions or guidance on your FDD renewal.
 --- 
-id: brand name
+id: user info
 question: |
-  What is your brand name?
+  Your Information
 fields:
-  - no label: brand
+  - Your name: users[0].name
+  - Your email: users[0].email
+    datatype: email
+  - Brand name: brand
 ---
 generic object: ALIndividual
 template: franchise_seller[i].person_type_label
@@ -235,12 +237,6 @@ generic object: ALIndividual
 template: former_franchisee[i].person_type_label
 content: |
   Is this a person or an organization?
----
-id: brand name
-question: |
-  What is your brand name?
-fields:
-  - no label: brand
 ---
 id: any current franchisees
 generic object: ALPeopleList
