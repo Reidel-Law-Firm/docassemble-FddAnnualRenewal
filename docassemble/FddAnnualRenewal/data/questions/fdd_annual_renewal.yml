@@ -3,6 +3,9 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALToolbox:phone-number-validation.yml  
 ---
+modules:
+  - docassemble.ReidelTheme.publish_to_webdav
+---
 metadata:
   title: |
     Fdd annual renewal
@@ -192,7 +195,23 @@ code: |
   #)
   
   nav.set_section('download_fdd_annual_renewal')
+  fdd_annual_renewal__form_publish
   fdd_annual_renewal_download
+---
+code: |
+  new_folder = get_new_bundle_path_name(al_recipient_bundle, filing_entity)
+  for document in al_recipient_bundle:
+    document['final'].path()
+    document.filename
+
+  try:
+    publish_to_webdav(al_recipient_bundle, 
+                      new_folder = new_folder,
+                      )
+    fdd_annual_renewal__form_publish = True
+  except Exception as e:
+    publish_error = str(e)
+    fdd_annual_renewal__form_publish = False
 ---
 id: Fdd_annual_renewal
 continue button field: fdd_annual_renewal_intro
