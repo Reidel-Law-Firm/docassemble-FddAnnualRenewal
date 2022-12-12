@@ -266,7 +266,7 @@ fields:
 ---
 id: revenue_total
 question: |
-  What is the total revenue?
+  What is the total revenue for the franchisor?
 fields:
   - no label: revenue_total
 ---
