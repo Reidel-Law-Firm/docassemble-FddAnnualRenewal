@@ -204,7 +204,7 @@ code: |
 ---
 code: |
   new_folder = get_new_bundle_path_name(al_recipient_bundle, brand)
-  for document in al_recipient_bundle:
+  for document in al_recipient_bundle.enabled_documents():
     document['final'].path()
     document.filename
 
