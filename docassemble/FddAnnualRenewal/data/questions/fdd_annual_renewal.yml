@@ -1080,5 +1080,5 @@ code: |
 depends on:
   - has_financials
 code: |
-  financials_attachment.enabled=upload
+  financials_attachment.enabled=has_financials
 ---
