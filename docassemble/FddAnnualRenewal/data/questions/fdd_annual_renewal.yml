@@ -199,7 +199,7 @@ code: |
   fdd_annual_renewal_download
 ---
 code: |
-  new_folder = get_new_bundle_path_name(al_recipient_bundle, filing_entity)
+  new_folder = get_new_bundle_path_name(al_recipient_bundle, brand)
   for document in al_recipient_bundle:
     document['final'].path()
     document.filename
