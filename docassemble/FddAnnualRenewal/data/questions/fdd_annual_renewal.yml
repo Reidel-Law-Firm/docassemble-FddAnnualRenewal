@@ -105,6 +105,9 @@ code: |
     current_franchisee.gather()
     signed_franchisee.gather()
     former_franchisee.gather()
+    
+  if upload: 
+    franchisee_lists_attachment.file
   
   set_progress(22)
   
@@ -157,7 +160,8 @@ code: |
   
   public_figures
   
-  has_financials
+  if has_financials:
+    financials_attachment.file
 
   has_other_changes
   
