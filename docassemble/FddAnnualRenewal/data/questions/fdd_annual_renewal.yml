@@ -223,7 +223,7 @@ question: |
   FDD Annual Renewal Questionnaire
 subquestion: |
   Franchise Disclosure Document Annual Renewal Automated Checklist
-
+  
   This automated questionnaire will walk you through the most frequent and necessary items for your FDD's annual renewal. You will be able to close this interview and return at a later time to complete your interview from the same browser or feel free to create a user to save your checklist answers to complete at any time from any device. 
   
   It will be easiest to complete this checklist with your current FDD version beside you. As you work through the answers, be sure to add as much detail as necessary for the renewal updates. You can see your progress through the questions at the top with the progress bar.
@@ -287,7 +287,7 @@ fields:
 ---
 id: revenue_total
 question: |
-  What is the total revenue?
+  What is the total revenue for the franchisor?
 fields:
   - no label: revenue_total
 ---
