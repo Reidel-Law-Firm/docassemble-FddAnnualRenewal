@@ -3,6 +3,9 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALToolbox:phone-number-validation.yml  
 ---
+modules:
+  - docassemble.ReidelTheme.publish_to_webdav
+---
 metadata:
   title: |
     Fdd annual renewal
@@ -92,7 +95,6 @@ code: |
   nav.set_section('review_fdd_annual_renewal')
   user_role = 'na'
   
-  users.gather()
   brand
   
   preferred
@@ -103,6 +105,9 @@ code: |
     current_franchisee.gather()
     signed_franchisee.gather()
     former_franchisee.gather()
+    
+  if upload: 
+    franchisee_lists_attachment.file
   
   set_progress(22)
   
@@ -121,7 +126,7 @@ code: |
   
   set_progress(44)
   
-  not_uniform
+  uniform
   
   required_fee_changes
   intended_fee_changes
@@ -155,11 +160,13 @@ code: |
   
   public_figures
   
-  has_financials
+  if has_financials:
+    financials_attachment.file
 
   has_other_changes
   
   set_progress(99)
+
 
   interview_order_fdd_annual_renewal = True
 ---
@@ -183,36 +190,56 @@ code: |
 
   signature_date
   # Store anonymous data for analytics / statistics
-  store_variables_snapshot(
-      persistent=True,
-      data={
-          "zip": showifdef("users[0].address.zip"),
-          "reached_interview_end": True,
-      },
-  )
+  #store_variables_snapshot(
+  #    persistent=True,
+  #    data={
+  #        "zip": showifdef("users[0].address.zip"),
+  #        "reached_interview_end": True,
+  #    },
+  #)
   
   nav.set_section('download_fdd_annual_renewal')
+  fdd_annual_renewal__form_publish
   fdd_annual_renewal_download
+---
+code: |
+  new_folder = get_new_bundle_path_name(al_recipient_bundle, brand)
+  for document in al_recipient_bundle.enabled_documents():
+    document['final'].path()
+    document.filename
+
+  try:
+    publish_to_webdav(al_recipient_bundle, 
+                      new_folder = new_folder,
+                      )
+    fdd_annual_renewal__form_publish = True
+  except Exception as e:
+    publish_error = str(e)
+    fdd_annual_renewal__form_publish = False
 ---
 id: Fdd_annual_renewal
 continue button field: fdd_annual_renewal_intro
 question: |
   FDD Annual Renewal Questionnaire
 subquestion: |
-  #Franchise Disclosure Document Annual Renewal Checklist
+  Franchise Disclosure Document Annual Renewal Automated Checklist
+  
   This automated questionnaire will walk you through the most frequent and necessary items for your FDD's annual renewal. You will be able to close this interview and return at a later time to complete your interview from the same browser or feel free to create a user to save your checklist answers to complete at any time from any device. 
   
-  It will be easiest to complete this checklist with your current FDD version beside you. As you work through the answers be sure to add as much detail as necessary for the renewal updates. You can see your progress through the questions at the top with the progress bar.
+  It will be easiest to complete this checklist with your current FDD version beside you. As you work through the answers, be sure to add as much detail as necessary for the renewal updates. You can see your progress through the questions at the top with the progress bar.
   
   Once you have completed the checklist questions, a simple formatted summary will be generated that you can download to send to your franchise attorney or your franchise compliance team.
   
-  Feel free to reach out to Reidel Law Firm for any additional questions or guidance on your FDD renewal at our website: ReidelLawFirm.com
+  Feel free to reach out to [Reidel Law Firm](https://www.reidellawfirm.com) for any additional questions or guidance on your FDD renewal.
 --- 
-id: brand name
+id: user info
 question: |
-  What is your brand name?
+  Your Information
 fields:
-  - no label: brand
+  - Your name: users[0].name
+  - Your email: users[0].email
+    datatype: email
+  - Brand name: brand
 ---
 generic object: ALIndividual
 template: franchise_seller[i].person_type_label
@@ -233,12 +260,6 @@ generic object: ALIndividual
 template: former_franchisee[i].person_type_label
 content: |
   Is this a person or an organization?
----
-id: brand name
-question: |
-  What is your brand name?
-fields:
-  - no label: brand
 ---
 id: any current franchisees
 generic object: ALPeopleList
@@ -769,11 +790,13 @@ question: |
 subquestion: |
   If you do not charge the same initial fee to all franchisees, then you will need to disclose “the range of formula used to calculate the initial fees paid in the fiscal year before the issance date and the factors that deternined the amount.”
 fields:
-  - "no label": not_uniform
+  - "no label": uniform
     datatype: yesnoradio
   - "Add details": fee_and_range
     input type: area
-    show if: not_uniform
+    show if:
+      variable: uniform
+      is: false
 ---
 id: financials upload
 question: |
@@ -1018,7 +1041,7 @@ event: fdd_annual_renewal_download
 question: |
   All done
 subquestion: |
-  Thank you ${users}. Your form is ready to download and send to your franchise attorney or compliance team. Enjoy!
+  Thank you. Your form is ready to download and send to your franchise attorney or compliance team. Enjoy!
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
   ${ action_button_html(url_action('review_fdd_annual_renewal'), label='Edit answers', color='info') }
@@ -1061,5 +1084,5 @@ code: |
 depends on:
   - has_financials
 code: |
-  financials_attachment.enabled=upload
+  financials_attachment.enabled=has_financials
 ---
