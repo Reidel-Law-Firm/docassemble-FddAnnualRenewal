@@ -685,6 +685,8 @@ fields:
 id: states
 question: |
   Which state(s) will you want to register in or renew this year? 
+subquestion: |
+  These are the registration states which require additional approvals and applications. Other states either do not have any registration or filing requirements or only require a simple filing.
 fields:
   - no label: states
     datatype: checkboxes
